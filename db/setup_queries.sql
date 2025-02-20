@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS Items (
 CREATE TABLE IF NOT EXISTS Ingredients (
     ingredient_id int NOT NULL UNIQUE AUTO_INCREMENT,
     ingredient_name varchar(100) NOT NULL UNIQUE,
+    ingredient_qty decimal NOT NULL,
     unit varchar(50) NOT NULL,
     unit_price decimal NOT NULL,
     PRIMARY KEY (ingredient_id)
@@ -35,7 +36,7 @@ CREATE TABLE IF NOT EXISTS ItemIngredients (
     item_ingredient_id int NOT NULL UNIQUE AUTO_INCREMENT, 
     item_id int NOT NULL,
     ingredient_id int NOT NULL,
-    quantity decimal NOT NULL,
+    required_qty decimal NOT NULL,
     PRIMARY KEY (item_ingredient_id),
     FOREIGN KEY (item_id) REFERENCES Items(item_id),
     FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id)
