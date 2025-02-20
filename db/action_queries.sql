@@ -37,42 +37,34 @@ INSERT INTO AssignedCaterers (employee_id, event_id) VALUES
 -- Select a client
 SELECT client_id, client_name, phone_number
    FROM Clients
-   WHERE client_id = :selected_id;
 
 -- Select an employee
 SELECT employee_id, first_name,last_name,age,has_drivers_license,has_alcohol_certification,has_food_certification
    FROM Employees
-   WHERE employee_id = :selected_id;
    
 -- Select an event
 SELECT event_id, client_id, menu_id, event_start, event_end, event_address
    FROM Events
-   WHERE event_id = :selected_id;
 
 -- Select a menu
 SELECT menu_id, menu_name
    FROM Menus
-   WHERE menu_id = :selected_id;
 
 -- Select a menu item
 SELECT item_id, menu_id, item_name, price, is_alcoholic
    FROM Items
-   WHERE item_id = :selected_id;
 
 -- Select an ingredient
 SELECT ingredient_id, ingredient_name, unit, unit_price
    FROM Ingredients
-   WHERE ingredient_id = :selected_id;
 
 -- Select an ingredient's link to a menu
 SELECT item_ingredient_id, item_id, ingredient_id, quantity
    FROM ItemIngredients
-   WHERE item_ingredient_id = :selected_id;
 
 -- Select an employee's assignment to an event
 SELECT assigned_caterers_id, employee_id, event_id
    FROM AssignedCaterers
-   WHERE assigned_caterers_id = :selected_id;
 --===========================================================================--
 
 
