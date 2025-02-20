@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Assigned Caterers</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Assigned Caterers</h1>
+    <nav>
+        [ <a href="index.html">HOME</a> |
+        <a href="clients.html">Clients</a> |
+        <a href="employees.html">Employees</a> |
+        <a href="assigned_caterers.html">Assigned Caterers</a> |
+        <a href="events.html">Event</a> |
+        <a href="menus.html">Menus</a> |
+        <a href="items.html">Items</a> |
+        <a href="item_ingredients.html">Item Ingredients</a> |
+        <a href="ingredients.html">Ingredients</a> ]
+    </nav>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Assignment ID</th>
+                <th>Employee ID</th>
+                <th>Event ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>101</td>
+                <td>201</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>102</td>
+                <td>202</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Add New Assignment</h3>
+    <form id="assignment-form" style="border: 2px solid black;">
+        <label>Employee ID: <input type="number" id="employee_id" required></label><br>
+        <label>Event ID: <input type="number" id="event_id" required></label><br>
+        <button type="button" onclick="addAssignment()">Add Assignment</button><br>
+    </form>
+
+    <script src="index.js"></script>
+  </body>
+</html>

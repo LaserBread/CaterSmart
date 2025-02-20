@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clients</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Clients</h1>
+    <nav>
+        [ <a href="index.html">HOME</a> |
+        <a href="clients.html">Clients</a> |
+        <a href="employees.html">Employees</a> |
+        <a href="assigned_caterers.html">Assigned Caterers</a> |
+        <a href="events.html">Event</a> |
+        <a href="menus.html">Menus</a> |
+        <a href="items.html">Items</a> |
+        <a href="item_ingredients.html">Item Ingredients</a> |
+        <a href="ingredients.html">Ingredients</a> ]
+    </nav>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Client ID</th>
+                <th>Client Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>John Doe</td>
+                <td>johndoe@example.com</td>
+                <td>(123) 456-7890</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Jane Smith</td>
+                <td>janesmith@example.com</td>
+                <td>(987) 654-3210</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Add New Client</h3>
+    <form id="client-form" style="border: 2px solid black;">
+        <label>Client Name: <input type="text" id="name" required></label><br>
+        <label>Email: <input type="email" id="email" required></label><br>
+        <label>Phone: <input type="tel" id="phone" required></label><br>
+        <button type="button" onclick="addClient()">Add Client</button><br>
+    </form>
+
+
+    <script src="index.js"></script>
+  </body>
+</html>

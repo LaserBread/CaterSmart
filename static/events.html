@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Events</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Events</h1>
+    <nav>
+        [ <a href="index.html">HOME</a> |
+        <a href="clients.html">Clients</a> |
+        <a href="employees.html">Employees</a> |
+        <a href="assigned_caterers.html">Assigned Caterers</a> |
+        <a href="events.html">Events</a> |
+        <a href="menus.html">Menus</a> |
+        <a href="items.html">Items</a> |
+        <a href="item_ingredients.html">Item Ingredients</a> |
+        <a href="ingredients.html">Ingredients</a> ]
+    </nav>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Event ID</th>
+                <th>Client ID</th>
+                <th>Menu ID</th>
+                <th>Event Start</th>
+                <th>Event End</th>
+                <th>Address</th>
+                <th>Event Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>101</td>
+                <td>5</td>
+                <td>2025-03-15 14:00</td>
+                <td>2025-03-15 18:00</td>
+                <td>789 Oak St, Cityville</td>
+                <td>Wedding</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Add New Event</h3>
+    <form id="event-form" style="border: 2px solid black;">
+        <label>Client ID: <input type="number" required></label><br>
+        <label>Menu ID: <input type="number" required></label><br>
+        <label>Event Start: <input type="datetime-local" required></label><br>
+        <label>Event End: <input type="datetime-local" required></label><br>
+        <label>Address: <input type="text" required></label><br>
+        <label>Event Type:
+            <select required>
+                <option value="Wedding">Wedding</option>
+                <option value="Corporate">Corporate</option>
+                <option value="Birthday">Birthday</option>
+                <option value="Other">Other</option>
+            </select>
+        </label><br>
+        <button type="submit">Add Event</button><br>
+    </form>
+  </body>
+</html>
