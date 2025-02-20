@@ -133,49 +133,58 @@ INSERT INTO Menus (menu_name) VALUES
 ("Fancy Pants"),("Sandwiches for All"),("Roadside Steakout");
 
 
-INSERT INTO Ingredients (ingredient_name, unit, unit_price) VALUES
+INSERT INTO Ingredients (ingredient_name, ingredient_qty, unit, unit_price) VALUES
 (
     "Steak",
+    60.0,
     "flanks",
     8.00
 ),
 (
     "Poivre Seasoning",
+    102,
     "shakers",
     3.40
 ),
 (
     "Club Veggies",
+    50,
     "bags",
     1.93
 ),
 (
     "Bread",
+    20,
     "loaves",
     5.84
 ),
 (
     "Portebello Sauce",
+    60,
     "bottles",
     3.14
 ),
 (
     "Root Beer",
+    80,
     "bottles",
     8.13
 ),
 (
     "Meatballs",
+    30,
     "bags",
     2.99
 ),
 (
     "Fancy Veggies",
+    20,
     "bags",
     5.89
 ),
 (
     "Wine",
+    7,
     "bottles",
     10.00
 );
@@ -236,71 +245,71 @@ INSERT INTO Items(item_name, price, is_alcoholic, menu_id) VALUES
     (SELECT menu_id FROM Menus where menu_name = "Roadside Steakout")
 );
 
-INSERT INTO ItemIngredients (ingredient_id, item_id, quantity) VALUES
+INSERT INTO ItemIngredients (ingredient_id, item_id, required_qty) VALUES
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Club Veggies" ),
     (SELECT item_id FROM Items WHERE item_name = "Maestro Club"),
-    10.0
+    0.1
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Bread" ),
     (SELECT item_id FROM Items WHERE item_name = "Maestro Club"),
-    10.0
+    0.2
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Meatballs" ),
     (SELECT item_id FROM Items WHERE item_name = "Montgomery Meatball"),
-    10.0
+    0.33333
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Bread" ),
     (SELECT item_id FROM Items WHERE item_name = "Montgomery Meatball"),
-    10.0
+    0.2
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Portebello Sauce" ),
     (SELECT item_id FROM Items WHERE item_name = "Portebello Potluck"),
-    10.0
+    0.05
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Bread" ),
     (SELECT item_id FROM Items WHERE item_name = "Portebello Potluck"),
-    10.0
+    0.2
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Root Beer" ),
     (SELECT item_id FROM Items WHERE item_name = "Route Bear Cane Sugar Root Beer"),
-    10.0
+    1
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Steak" ),
     (SELECT item_id FROM Items WHERE item_name = "Steak au Poivre"),
-    10.0
+    1
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Poivre Seasoning" ),
     (SELECT item_id FROM Items WHERE item_name = "Steak au Poivre"),
-    10.0
+    0.08
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Wine" ),
     (SELECT item_id FROM Items WHERE item_name = "Gilrose Red Wine"),
-    10.0
+    0.1
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Steak" ),
     (SELECT item_id FROM Items WHERE item_name = "Filet Mignon"),
-    10.0
+    1
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Steak" ),
     (SELECT item_id FROM Items WHERE item_name = "Jersey Prime Rib"),
-    10.0
+    1
 ),
 (
     (SELECT ingredient_id FROM Ingredients WHERE ingredient_name = "Steak" ),
     (SELECT item_id FROM Items WHERE item_name = "Philly Cheesesteak"),
-    10.0
+    1
 );
 
 INSERT INTO Events (event_start, event_end, event_address, event_type, client_id, menu_id) VALUES

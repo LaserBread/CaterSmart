@@ -20,12 +20,12 @@ INSERT INTO Items (menu_id, item_name, price, is_alcoholic) VALUES
 (:menu_id, :item_name, :price, :is_alcoholic);
 
 -- Add an ingredient
-INSERT INTO Ingredients (ingredient_name, unit, unit_price) VALUES
-(:ingredient_name, :unit, :unit_price);
+INSERT INTO Ingredients (ingredient_name, ingredient_qty, unit, unit_price) VALUES
+(:ingredient_name, :ingredient_qty :unit, :unit_price);
 
 -- Assign an ingredient to a menu
-INSERT INTO ItemIngredients (item_id, ingredient_id, quantity) VALUES
-(:item_id, :ingredient_id, :quantity);
+INSERT INTO ItemIngredients (item_id, ingredient_id, required_qty) VALUES
+(:item_id, :ingredient_id, :required_qty);
 
 -- Assign an employee to an event
 INSERT INTO AssignedCaterers (employee_id, event_id) VALUES
