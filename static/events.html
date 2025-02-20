@@ -31,37 +31,126 @@
                 <th>Event End</th>
                 <th>Address</th>
                 <th>Event Type</th>
+                <th>Edit</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="event-table-body">
             <tr>
                 <td>1</td>
-                <td>101</td>
-                <td>5</td>
+                <td>1</td>
+                <td>1</td>
                 <td>2025-03-15 14:00</td>
                 <td>2025-03-15 18:00</td>
                 <td>789 Oak St, Cityville</td>
                 <td>Wedding</td>
+                <td><button onclick="editEvent(this)">Edit</button></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2025-07-07 12:00</td>
+                <td>2025-07-07 17:00</td>
+                <td>123 Grand Ave, Townsville</td>
+                <td>Reunion</td>
+                <td><button onclick="editEvent(this)">Edit</button></td>
             </tr>
         </tbody>
     </table>
 
     <h3>Add New Event</h3>
     <form id="event-form" style="border: 2px solid black;">
-        <label>Client ID: <input type="number" required></label><br>
-        <label>Menu ID: <input type="number" required></label><br>
-        <label>Event Start: <input type="datetime-local" required></label><br>
-        <label>Event End: <input type="datetime-local" required></label><br>
-        <label>Address: <input type="text" required></label><br>
+        <!-- <label>Client ID: <input type="number" id="client-id" required></label><br> -->
+        <label>Client ID: 
+            <select name="client_id" id="client_id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </label><br>
+        <!-- <label>Menu ID: <input type="number" id="menu-id" required></label><br> -->
+        <label>Menu ID: 
+            <select name="menu_id" id="menu_id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </label><br>
+        <label>Event Start: <input type="datetime-local" id="event-start" required></label><br>
+        <label>Event End: <input type="datetime-local" id="event-end" required></label><br>
+        <label>Address: <input type="text" id="address" required></label><br>
         <label>Event Type:
-            <select required>
+            <select id="event-type" required>
                 <option value="Wedding">Wedding</option>
                 <option value="Corporate">Corporate</option>
                 <option value="Birthday">Birthday</option>
+                <option value="Reunion">Reunion</option>
                 <option value="Other">Other</option>
             </select>
         </label><br>
         <button type="submit">Add Event</button><br>
     </form>
+
+    <h3>Edit Event</h3>
+    <form id="edit-event-form" style="border: 2px solid black; display: none;">
+        <input type="hidden" id="edit-event-id">
+        <label>Client ID: <input type="number" id="edit-client-id" required></label><br>
+        <label>Menu ID: <input type="number" id="edit-menu-id" required></label><br>
+        <label>Event Start: <input type="datetime-local" id="edit-event-start" required></label><br>
+        <label>Event End: <input type="datetime-local" id="edit-event-end" required></label><br>
+        <label>Address: <input type="text" id="edit-address" required></label><br>
+        <label>Event Type:
+            <select id="edit-event-type" required>
+                <option value="Wedding">Wedding</option>
+                <option value="Corporate">Corporate</option>
+                <option value="Birthday">Birthday</option>
+                <option value="Reunion">Reunion</option>
+                <option value="Other">Other</option>
+            </select>
+        </label><br>
+        <button type="button" onclick="saveEdit()">Save Changes</button><br>
+    </form>
+
+    <script>
+        // NOTE: functionality to edit HTML page has been implemented, but this would likely be changed
+        // or implemented on the back end
+        function editEvent(button) {
+            // get the row of the clicked button - button inside td, td inside tr (table row)
+            let row = button.parentNode.parentNode;
+            let cells = row.getElementsByTagName("td");
+
+            // populate the edit form fields
+            document.getElementById("edit-event-id").value = cells[0].innerText;
+            document.getElementById("edit-client-id").value = cells[1].innerText;
+            document.getElementById("edit-menu-id").value = cells[2].innerText;
+            document.getElementById("edit-event-start").value = cells[3].innerText.replace(" ", "T");
+            document.getElementById("edit-event-end").value = cells[4].innerText.replace(" ", "T");
+            document.getElementById("edit-address").value = cells[5].innerText;
+            document.getElementById("edit-event-type").value = cells[6].innerText;
+
+            // show the edit form
+            document.getElementById("edit-event-form").style.display = "block";
+        }
+
+        function saveEdit() {
+            // get the event ID from the hidden input field
+            let eventId = document.getElementById("edit-event-id").value;
+
+            // find the row with the matching event ID
+            let rows = document.getElementById("event-table-body").getElementsByTagName("tr");
+            for (let row of rows) {
+                if (row.cells[0].innerText === eventId) {
+                    row.cells[1].innerText = document.getElementById("edit-client-id").value;
+                    row.cells[2].innerText = document.getElementById("edit-menu-id").value;
+                    row.cells[3].innerText = document.getElementById("edit-event-start").value.replace("T", " ");
+                    row.cells[4].innerText = document.getElementById("edit-event-end").value.replace("T", " ");
+                    row.cells[5].innerText = document.getElementById("edit-address").value;
+                    row.cells[6].innerText = document.getElementById("edit-event-type").value;
+                    break;
+                }
+            }
+
+            // hide the edit form
+            document.getElementById("edit-event-form").style.display = "none";
+        }
+    </script>
   </body>
 </html>
