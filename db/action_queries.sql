@@ -8,28 +8,28 @@ INSERT INTO Employees (first_name, last_name, birthdate, has_drivers_license, ha
 VALUES (:first_name, :last_name, :birthdate, :has_drivers_license, :has_alcohol_certification, :has_food_certification);
 
 -- Add an event
-INSERT INTO Events (client_id, menu_id, event_start, event_end, address, event_type) VALUES
-(:client_id, :menu_id, :event_start, :event_end, :event_address);
+INSERT INTO Events (client_id, menu_id, event_start, event_end, event_address, event_type)
+VALUES (:client_id, :menu_id, :event_start, :event_end, :event_address);
 
 -- Add a menu
-INSERT INTO Menus (menu_name) VALUES
-(:menu_name);
+INSERT INTO Menus (menu_name)
+VALUES (:menu_name);
 
 -- Add a menu item
-INSERT INTO Items (menu_id, item_name, price, is_alcoholic) VALUES
-(:menu_id, :item_name, :price, :is_alcoholic);
+INSERT INTO Items (menu_id, item_name, price, is_alcoholic)
+VALUES (:menu_id, :item_name, :price, :is_alcoholic);
 
 -- Add an ingredient
-INSERT INTO Ingredients (ingredient_name, ingredient_qty, unit, unit_price) VALUES
-(:ingredient_name, :ingredient_qty :unit, :unit_price);
+INSERT INTO Ingredients (ingredient_name, ingredient_qty, unit, unit_price)
+VALUES (:ingredient_name, :ingredient_qty :unit, :unit_price);
 
 -- Assign an ingredient to a menu
-INSERT INTO ItemIngredients (item_id, ingredient_id, required_qty) VALUES
-(:item_id, :ingredient_id, :required_qty);
+INSERT INTO ItemIngredients (item_id, ingredient_id, required_qty)
+VALUES (:item_id, :ingredient_id, :required_qty);
 
 -- Assign an employee to an event
-INSERT INTO AssignedCaterers (employee_id, event_id) VALUES
-(:employee_id, :event_id);
+INSERT INTO AssignedCaterers (employee_id, event_id)
+VALUES (:employee_id, :event_id);
 --===========================================================================--
 
 
@@ -43,7 +43,7 @@ SELECT employee_id, first_name, last_name, birthdate, has_drivers_license, has_a
    FROM Employees
    
 -- Select an event
-SELECT event_id, client_id, menu_id, event_start, event_end, address, event_type
+SELECT event_id, client_id, menu_id, event_start, event_end, event_address, event_type
    FROM Events
 
 -- Select a menu
@@ -55,7 +55,7 @@ SELECT item_id, menu_id, item_name, price, is_alcoholic
    FROM Items
 
 -- Select an ingredient
-SELECT ingredient_id, ingredient_name, unit, unit_price
+SELECT ingredient_id, ingredient_name, ingredient_qty, unit, unit_price
    FROM Ingredients
 
 -- Select an ingredient's link to a menu
@@ -83,7 +83,7 @@ UPDATE Events
         menu_id = :menu_in, 
         event_start = :start_in,
         event_end = :end_in,
-        address = :address_in
+        event_address = :address_in
         event_type = :event_type_in
     WHERE event_id = :selected_id;
 
