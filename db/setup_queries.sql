@@ -1,3 +1,8 @@
+-------------------------------------------------------------------------------------------
+-- Creating Tables
+-------------------------------------------------------------------------------------------
+
+-- Query to create the Clients table
 CREATE TABLE IF NOT EXISTS Clients (
     client_id int NOT NULL UNIQUE AUTO_INCREMENT,
     client_name varchar(50) NOT NULL,
@@ -5,13 +10,14 @@ CREATE TABLE IF NOT EXISTS Clients (
     email varchar(50) NOT NULL UNIQUE,
     PRIMARY KEY (client_id)
 );
-
+-- Query to create the Menus table
 CREATE TABLE IF NOT EXISTS Menus (
     menu_id int NOT NULL UNIQUE AUTO_INCREMENT,
     menu_name varchar(50) NOT NULL UNIQUE,
     PRIMARY KEY (menu_id)
 );
 
+-- Query to create the Items table
 CREATE TABLE IF NOT EXISTS Items (
     item_id int NOT NULL UNIQUE AUTO_INCREMENT,
     menu_id int,
@@ -23,6 +29,7 @@ CREATE TABLE IF NOT EXISTS Items (
         ON DELETE SET NULL  -- allows menu deletion while preserving items
 );
 
+-- Query to create the Ingredients table
 CREATE TABLE IF NOT EXISTS Ingredients (
     ingredient_id int NOT NULL UNIQUE AUTO_INCREMENT,
     ingredient_name varchar(50) NOT NULL UNIQUE,
@@ -32,6 +39,7 @@ CREATE TABLE IF NOT EXISTS Ingredients (
     PRIMARY KEY (ingredient_id)
 );
 
+-- Query to create the ItemIngredients table
 CREATE TABLE IF NOT EXISTS ItemIngredients (
     item_ingredient_id int NOT NULL UNIQUE AUTO_INCREMENT,
     item_id int NOT NULL,
@@ -44,6 +52,7 @@ CREATE TABLE IF NOT EXISTS ItemIngredients (
         ON DELETE CASCADE   -- when item or ingredient is deleted, remove connections
 );
 
+-- Query to create the Employees table
 CREATE TABLE IF NOT EXISTS Employees (
     employee_id int NOT NULL UNIQUE AUTO_INCREMENT,
     first_name varchar(50) NOT NULL,
@@ -55,6 +64,7 @@ CREATE TABLE IF NOT EXISTS Employees (
     PRIMARY KEY (employee_id)
 );
 
+-- Query to create the Events table
 CREATE TABLE IF NOT EXISTS Events (
     event_id int NOT NULL UNIQUE AUTO_INCREMENT,
     client_id int NOT NULL,
@@ -70,6 +80,7 @@ CREATE TABLE IF NOT EXISTS Events (
         ON DELETE RESTRICT      -- prevent menu deletion if events use it
 );
 
+-- Query to create the AssignedCaterers table
 CREATE TABLE IF NOT EXISTS AssignedCaterers (
     assigned_caterers_id int NOT NULL UNIQUE AUTO_INCREMENT,
     employee_id int NOT NULL,
@@ -81,6 +92,9 @@ CREATE TABLE IF NOT EXISTS AssignedCaterers (
         ON DELETE CASCADE       -- when event or employee is deleted, remove assignments
 );
 
+-------------------------------------------------------------------------------------------
+-- Inserting Data
+-------------------------------------------------------------------------------------------
 
 INSERT INTO Clients (
     client_name,
