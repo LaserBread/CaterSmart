@@ -1,0 +1,10 @@
+click
+Flask
+Flask-MySQLdb
+gunicorn
+itsdangerous
+Jinja2
+MarkupSafe
+mysqlclient
+python-dotenv
+Werkzeug
