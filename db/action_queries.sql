@@ -59,12 +59,26 @@ SELECT ingredient_id, ingredient_name, ingredient_qty, unit, unit_price
    FROM Ingredients
 
 -- Select an ingredient's link to a menu
-SELECT item_ingredient_id, item_id, ingredient_id, required_qty
-   FROM ItemIngredients
+SELECT ItemIngredients.item_ingredient_id, 
+       ItemIngredients.item_id, 
+       Items.item_name, 
+       ItemIngredients.ingredient_id, 
+       Ingredients.ingredient_name, 
+       ItemIngredients.required_qty
+FROM ItemIngredients
+INNER JOIN Items ON ItemIngredients.item_id = Items.item_id
+INNER JOIN Ingredients ON ItemIngredients.ingredient_id = Ingredients.ingredient_id
+ORDER BY ItemIngredients.item_ingredient_id ASC;
 
 -- Select an employee's assignment to an event
-SELECT assigned_caterers_id, employee_id, event_id
-   FROM AssignedCaterers
+SELECT AssignedCaterers.assigned_caterers_id, 
+       AssignedCaterers.employee_id, 
+       CONCAT(Employees.first_name, ' ', Employees.last_name) AS caterer_name, 
+       AssignedCaterers.event_id
+FROM AssignedCaterers
+INNER JOIN Employees ON AssignedCaterers.employee_id = Employees.employee_id
+ORDER BY AssignedCaterers.assigned_caterers_id ASC;
+
 --===========================================================================--
 
 
