@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Items</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <h1>Items</h1>
+    <nav>
+        [ <a href="/">HOME</a> |
+        <a href="/clients">Clients</a> |
+        <a href="/employees">Employees</a> |
+        <a href="/assigned_caterers">Assigned Caterers</a> |
+        <a href="/events">Events</a> |
+        <a href="/menus">Menus</a> |
+        <a href="/items">Items</a> |
+        <a href="/item_ingredients">Item Ingredients</a> |
+        <a href="/ingredients">Ingredients</a> ]
+    </nav>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Menu ID</th>
+                <th>Item Name</th>
+                <th>Price</th>
+                <th>Alcoholic</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>Chicken Alfredo</td>
+                <td>$12.99</td>
+                <td>False</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>2</td>
+                <td>Red Wine</td>
+                <td>$8.50</td>
+                <td>True</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>NULL</td>
+                <td>Lobster Roll</td>
+                <td>$15.25</td>
+                <td>False</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Add New Item</h3>
+    <form id="item-form" style="border: 2px solid black;">
+        <!-- <label>Menu ID: <input type="number" required></label><br> -->
+        <label>Menu ID: 
+            <select name="menu_id" id="menu_id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="NULL">NULL</option>
+            </select>
+        </label><br>
+        <label>Item Name: <input type="text" required></label><br>
+        <label>Price: <input type="number" step="0.01" required></label><br>
+        <label>Alcoholic:
+            <select required>
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+        </label><br>
+        <button type="submit">Add Item</button><br>
+    </form>
+  </body>
+</html>

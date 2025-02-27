@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Item Ingredients</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <h1>Item Ingredients</h1>
+    <nav>
+        [ <a href="/">HOME</a> |
+        <a href="/clients">Clients</a> |
+        <a href="/employees">Employees</a> |
+        <a href="/assigned_caterers">Assigned Caterers</a> |
+        <a href="/events">Events</a> |
+        <a href="/menus">Menus</a> |
+        <a href="/items">Items</a> |
+        <a href="/item_ingredients">Item Ingredients</a> |
+        <a href="/ingredients">Ingredients</a> ]
+    </nav>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Item Ingredient ID</th>
+                <th>Item ID</th>
+                <th>Ingredient ID</th>
+                <th>Ingredient Quantity Required</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0.5</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>0.2</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Add New Item Ingredient</h3>
+    <form id="item-ingredient-form" style="border: 2px solid black;">
+        <!-- <label>Item ID: <input type="number" required></label><br> -->
+        <label>Item ID: 
+            <select name="item_id" id="item_id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </label><br>
+        <!-- <label>Ingredient ID: <input type="number" required></label><br> -->
+        <label>Ingredient ID: 
+            <select name="ingredient_id" id="ingredient_id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </label><br>
+        <label>Ingredient Quantity Required: <input type="number" step="0.01" required></label><br>
+        <button type="submit">Add Item Ingredient</button><br>
+    </form>
+  </body>
+</html>

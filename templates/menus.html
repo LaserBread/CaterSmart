@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Menus</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <h1>Menus</h1>
+    <nav>
+        [ <a href="/">HOME</a> |
+        <a href="/clients">Clients</a> |
+        <a href="/employees">Employees</a> |
+        <a href="/assigned_caterers">Assigned Caterers</a> |
+        <a href="/events">Events</a> |
+        <a href="/menus">Menus</a> |
+        <a href="/items">Items</a> |
+        <a href="/item_ingredients">Item Ingredients</a> |
+        <a href="/ingredients">Ingredients</a> ]
+    </nav>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Menu ID</th>
+                <th>Menu Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Fall Harvest</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Summer Spread</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Add New Menu</h3>
+    <form id="menu-form" style="border: 2px solid black;">
+        <label>Menu Name: <input type="text" id="menu_name" required></label><br>
+        <button type="button" onclick="addMenu()">Add Menu</button><br>
+    </form>
+
+    <script src="index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CaterSmart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <h1>CaterSmart</h1>
+    <nav>
+        [ <a href="/">HOME</a> |
+        <a href="/clients">Clients</a> |
+        <a href="/employees">Employees</a> |
+        <a href="/assigned_caterers">Assigned Caterers</a> |
+        <a href="/events">Events</a> |
+        <a href="/menus">Menus</a> |
+        <a href="/items">Items</a> |
+        <a href="/item_ingredients">Item Ingredients</a> |
+        <a href="/ingredients">Ingredients</a> ]
+    </nav>
+
+    <ul>
+        <li>Clients: see all CaterSmart Clients and add a new Client</li>
+        <li>Employees: see all CaterSmart Employees and add a new Employee</li>
+        <li>Assigned Caterers: see catering assignments - which Employees are assigned to which Events. Add a new assignment, edit an existing assignment, or delete an assignment</li>
+        <li>Events: see all CaterSmart Events. Add a new Event or edit an existing Event</li>
+        <li>Menus: see all CaterSmart Menus and add a new Menu</li>
+        <li>Items: see all menu Items offered by CaterSmart, and add a new menu Item to the system</li>
+        <li>Item Ingredients: see an Ingredient required by a given Item, and the quantity needed. Add a new Item Ingredient</li>
+        <li>Ingredients: see all Ingredients used in Items and add a new Ingredient</li>
+    </ul>
+
+
+  </body>
+</html>

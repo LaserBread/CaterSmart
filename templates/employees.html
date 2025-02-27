@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Employees</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <h1>Employees</h1>
+    <nav>
+        [ <a href="/">HOME</a> |
+        <a href="/clients">Clients</a> |
+        <a href="/employees">Employees</a> |
+        <a href="/assigned_caterers">Assigned Caterers</a> |
+        <a href="/events">Events</a> |
+        <a href="/menus">Menus</a> |
+        <a href="/items">Items</a> |
+        <a href="/item_ingredients">Item Ingredients</a> |
+        <a href="/ingredients">Ingredients</a> ]
+    </nav>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Birthdate</th>
+                <th>Has Driver's License?</th>
+                <th>Has Alcohol Certification?</th>
+                <th>Has Food Certification?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Alice</td>
+                <td>Johnson</td>
+                <td>01/01/1997</td>
+                <td>True</td>
+                <td>True</td>
+                <td>True</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Daniel</td>
+                <td>Thompson</td>
+                <td>02/02/2007</td>
+                <td>True</td>
+                <td>False</td>
+                <td>True</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Add New Employee</h3>
+    <form id="employee-form" style="border: 2px solid black;">
+        <label>First Name: <input type="text" required></label><br>
+        <label>Last Name: <input type="text" required></label><br>
+        <label>Birthdate: <input type="date" required></label><br>
+        <label>Drivers' License: 
+            <select required>
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+        </label><br>
+        <label>Alcohol Certification: 
+            <select required>
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+        </label><br>
+        <label>Food Certification: 
+            <select required>
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+        </label><br>
+        <button type="submit">Add Employee</button><br>
+    </form>
+  </body>
+</html>
