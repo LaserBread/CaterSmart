@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Assigned Caterers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <h1>Assigned Caterers</h1>
+    <nav>
+        [ <a href="/">HOME</a> |
+        <a href="/clients">Clients</a> |
+        <a href="/employees">Employees</a> |
+        <a href="/assigned_caterers">Assigned Caterers</a> |
+        <a href="/events">Events</a> |
+        <a href="/menus">Menus</a> |
+        <a href="/items">Items</a> |
+        <a href="/item_ingredients">Item Ingredients</a> |
+        <a href="/ingredients">Ingredients</a> ]
+    </nav>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Assignment ID</th>
+                <th>Employee ID</th>
+                <th>Caterer Name</th>
+                <th>Event ID</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="assignment-table-body">
+            {% for row in data %}
+            <tr>
+                <td>{{ row.assigned_caterers_id }}</td>
+                <td>{{ row.employee_id }}</td>
+                <td>{{ row.caterer_name }}</td>
+                <td>{{ row.event_id }}</td>
+                <td><button onclick="editAssignment(this)">Edit</button></td>
+                <td><button onclick="deleteAssignment('{{ row.assigned_caterers_id }}')">Delete</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Add New Assignment</h3>
+    <form id="assignment-form" action="/assigned_caterers" method="POST" style="border: 2px solid black;">
+        <label>Employee ID: 
+            <select name="employee_id" id="employee_id">
+                {% for employee in employees %}
+                <option value="{{ employee.employee_id }}">{{ employee.employee_id }} - {{ employee.name }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+        <label>Event ID: 
+            <select name="event_id" id="event_id">
+                {% for event in events %}
+                <option value="{{ event.event_id }}">{{ event.event_id }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+        <button type="submit">Add Assignment</button><br>
+    </form>
+
+    <h3>Edit Assignment</h3>
+    <form id="edit-assignment-form" action="/update_assignment" method="POST" style="border: 2px solid black; display: none;">
+        <input type="hidden" id="edit-assignment-id" name="assignment_id">
+        <label>Employee ID: 
+            <select id="edit-employee-id" name="employee_id">
+                {% for employee in employees %}
+                <option value="{{ employee.employee_id }}">{{ employee.employee_id }} - {{ employee.name }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+        <label>Event ID: 
+            <select id="edit-event-id" name="event_id">
+                {% for event in events %}
+                <option value="{{ event.event_id }}">{{ event.event_id }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+        <button type="submit">Save Changes</button>
+        <button type="button" onclick="cancelEdit()">Cancel</button>
+    </form>
+
+    <script>
+        function editAssignment(button) {
+            // get the row of the clicked button
+            let row = button.parentNode.parentNode;
+            let cells = row.getElementsByTagName("td");
+
+            // populate the edit form fields
+            document.getElementById("edit-assignment-id").value = cells[0].innerText;
+            
+            // Set the dropdown values
+            const employeeId = cells[1].innerText;
+            const employeeSelect = document.getElementById("edit-employee-id");
+            for (let i = 0; i < employeeSelect.options.length; i++) {
+                if (employeeSelect.options[i].value === employeeId) {
+                    employeeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            
+            const eventId = cells[3].innerText;
+            const eventSelect = document.getElementById("edit-event-id");
+            for (let i = 0; i < eventSelect.options.length; i++) {
+                if (eventSelect.options[i].value === eventId) {
+                    eventSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // show the edit form
+            document.getElementById("edit-assignment-form").style.display = "block";
+        }
+
+        function cancelEdit() {
+            document.getElementById("edit-assignment-form").style.display = "none";
+        }
+
+        function deleteAssignment(id) {
+            if (confirm("Are you sure you want to delete this assignment?")) {
+                window.location.href = "/delete_assignment/" + id;
+            }
+        }
+    </script>
+  </body>
+</html>
