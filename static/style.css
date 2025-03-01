@@ -1,7 +1,115 @@
+
 * {
     font-family: sans-serif;
 }
-
-h1 {
-    background-color: orange;
+:root{
+    --menubar-radius: 10px; /* Create a variable to hold our rounded corners*/
 }
+body{
+    margin:0;
+    background-color:lightgray;
+}
+
+/*======== MENU BAR =========================================================*/
+/* The menubar is limited to a width of 1050px, after which it stops growing, but will otherwise take up the whole screen. */
+header {
+    box-sizing: border-box; /* Include padding in the calculation of the box width*/
+    max-width: 1050px;
+    align-self:center;
+    margin: auto;
+    background-color: orange;
+    transition-duration: 200ms; /* Dictates the duration of animations, namely color changes when hovering over a link and the corners rounding or unrounding when the width is capped*/
+}
+
+#title{
+    font-size:30pt;
+    box-sizing: border-box;
+    padding:5px;
+}
+
+a.nolink{
+    color:inherit;
+    text-decoration:none;
+}
+
+/*-------- NAVIGATION BAR ---------------------------------------------------*/
+/* The set of navigation links displayed below the header. */
+.navbar{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;
+    background-color: crimson;
+    box-sizing: border-box;
+    transition-duration: inherit;
+}
+
+.navbutton{
+    box-sizing: border-box;
+    height:fit-content;
+    overflow: hidden;
+    text-align:center;
+    padding-top:10px;
+    padding-bottom:10px;
+    color: white;
+    border-left:1px solid;
+    margin:0px 0px;
+    text-decoration:none;
+    transition-duration: inherit;
+    &:hover{
+      color:whitesmoke;
+      background-color: orangered;
+    }
+    &:active{
+      color:black;
+      border-color:rgb(255, 242, 237);
+      background-color:rgb(255, 242, 237);
+    }
+}
+
+.navbutton:first-child{
+    /* Override the border styling of the leftmost element so there is no white border to its left */
+    border-left:0px;
+
+}
+/*---------------------------------------------------------------------------*/
+
+
+/*-------- CAP MENUBAR WIDTH ------------------------------------------------*/
+/* This stylesheet will be automatically applied if the viewport (the width of the browser window, goes over 1065px. 1050 would have made sense, but for some reason the menubar doesn't count 1050 as 1050. It will be unapplied when the width returns to under 1065px*/
+
+@media(min-width: 1065px){
+    header{
+        border-radius:0px 0px var(--menubar-radius) var(--menubar-radius);
+    }
+
+    navbar{
+        border-radius:0px 0px var(--menubar-radius) var(--menubar-radius);
+    }
+
+    .navbutton:last-child{
+        border-bottom-right-radius: var(--menubar-radius);
+    }
+
+    .navbutton:first-child{
+        border-bottom-left-radius: var(--menubar-radius);
+    }
+
+    .navbar{
+        border-radius: 0px 0px var(--menubar-radius) var(--menubar-radius);
+    }
+}
+/*---------------------------------------------------------------------------*/
+
+/*===========================================================================*/
+
+
+/*======== CONTENT ==========================================================*/
+/* The content of the page */
+.content{
+    position:relative;
+    z-index: -2;
+    background-color:white;
+    margin: calc(var(--menubar-radius) * -1) auto 0 auto;
+    padding: calc(var(--menubar-radius) + 3px) 10px 10px 10px;
+    max-width: 1000px;
+}
+/*===========================================================================*/
