@@ -3,7 +3,7 @@
     font-family: sans-serif;
 }
 :root{
-    --menubar-radius: 10px; /* Create a variable to hold our rounded corners*/
+    --round-radius: 10px; /* Create a variable to hold our rounded corners*/
     --transition-time: 200ms;
 
     --color_button: rgb(226, 226, 253);
@@ -88,23 +88,23 @@ a.nolink{
 
 @media(min-width: 1050px){
     header{
-        border-radius:0px 0px var(--menubar-radius) var(--menubar-radius);
+        border-radius:0px 0px var(--round-radius) var(--round-radius);
     }
 
     navbar{
-        border-radius:0px 0px var(--menubar-radius) var(--menubar-radius);
+        border-radius:0px 0px var(--round-radius) var(--round-radius);
     }
 
     .navbutton:last-child{
-        border-bottom-right-radius: var(--menubar-radius);
+        border-bottom-right-radius: var(--round-radius);
     }
 
     .navbutton:first-child{
-        border-bottom-left-radius: var(--menubar-radius);
+        border-bottom-left-radius: var(--round-radius);
     }
 
     .navbar{
-        border-radius: 0px 0px var(--menubar-radius) var(--menubar-radius);
+        border-radius: 0px 0px var(--round-radius) var(--round-radius);
     }
 }
 /*---------------------------------------------------------------------------*/
@@ -220,3 +220,24 @@ button{
     user-select: none;
 }
 
+input{
+    min-width: 50px;
+    min-height: 30px;
+    border-radius: var(--round-radius);
+}
+
+text{
+    
+}
+
+#employee-form{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+    "fname fname fname lname lname lname"
+    "dob dob dob dob dob dob"
+    "driver driver food food alcohol alcohol"
+    "submit submit submit submit submit submit"; 
+}

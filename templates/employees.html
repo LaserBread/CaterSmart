@@ -16,7 +16,7 @@
 
     <div class="content">
         <div class="entrylist" id="mainlist">
-            
+
             <div class="list-element">
                 <div>Jeb Jab</div>
                 <div class="iconbox unselectable" title="Has a driver's license">
@@ -46,31 +46,30 @@
         </div>
 
         <button> + Add New </button>
-        <h3>Add New Employee</h3>
-        <form id="employee-form" style="border: 2px solid black;">
-            <label>First Name: <input type="text" required></label><br>
-            <label>Last Name: <input type="text" required></label><br>
-            <label>Birthdate: <input type="date" required></label><br>
-            <label>Drivers' License:
-                <select required>
-                    <option value="True">True</option>
-                    <option value="False">False</option>
-                </select>
-            </label><br>
-            <label>Alcohol Certification:
-                <select required>
-                    <option value="True">True</option>
-                    <option value="False">False</option>
-                </select>
-            </label><br>
-            <label>Food Certification:
-                <select required>
-                    <option value="True">True</option>
-                    <option value="False">False</option>
-                </select>
-            </label><br>
-            <button type="submit">Add Employee</button><br>
-        </form>
+
+        <div class="editpane" id="editpane">
+            <h3>Add New Employee</h3>
+            <form id="employee-form" style="border: 2px solid rgb(240, 240, 240);">
+                <label style="grid-area:fname;">First Name: <input type="text" required></label>
+                <label style="grid-area:lname;">Last Name: <input type="text" required></label>
+                <label style="grid-area:dob;">Birthdate: <input type="date" required></label>
+                <label style="grid-area:driver;">Drivers' License:
+                    <input type="checkbox">
+                </label>
+                <label style="grid-area:food;">Food Certification:
+                    <input type="checkbox"><span class="check"></span>
+                </label>
+                <label style="grid-area:alcohol;">Alcohol Certification:
+                    <input type="checkbox">
+                </label>
+                <button type="submit" style="grid-area:submit;">Add Employee</button>
+            </form>
+
+
+            <div id="noneselected">
+                <p>Select an employee to edit or press "+ Add New"</p>
+            </div>
+        </div>
     </div>
 </body>
 
