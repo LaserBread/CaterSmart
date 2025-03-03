@@ -4,6 +4,15 @@
 }
 :root{
     --menubar-radius: 10px; /* Create a variable to hold our rounded corners*/
+    --transition-time: 200ms;
+
+    --color_button: rgb(226, 226, 253);
+    --color_button-hover: rgb(172, 172, 230);
+    --color_button-active: rgb(97, 99, 233);
+
+    --color_button_danger: rgb(253, 109, 109);
+    --color_button-hover_danger: rgb(224, 57, 57);
+    --color_button-active_danger: rgb(161, 35, 35);
 }
 body{
     margin:0;
@@ -18,7 +27,7 @@ header {
     align-self:center;
     margin: auto;
     background-color: orange;
-    transition-duration: 200ms; /* Dictates the duration of animations, namely color changes when hovering over a link and the corners rounding or unrounding when the width is capped*/
+    transition-duration: var(--transition-time); /* Dictates the duration of animations, namely color changes when hovering over a link and the corners rounding or unrounding when the width is capped*/
 }
 
 #title{
@@ -112,6 +121,11 @@ a.nolink{
     padding: 10px 10px 10px 10px;
     max-width: 1000px;
 }
+footer.content{
+    background-color:gray;
+    padding:10px;
+    color:lightgray;
+}
 /*===========================================================================*/
 
 
@@ -123,23 +137,86 @@ a.nolink{
     grid-template-columns: 6fr 1fr 1fr 1fr 1fr;
     height:fit-content;
     padding: 10px;
+
+    &:nth-child(even){
+        background-color: lightgrey;
+    }
+    
+    &:nth-child(odd){
+        background-color: grey;
+    }
 }
 
-.edit-button{
-    background-color: whitesmoke;
+.iconbox{
+    margin-left:auto;
+
+}
+
+button{
+    background-color: var(--color_button);
     display:flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
+    min-width: 30px;
     height:30px;
     align-self: center;
-    border: 2px rgb(193, 194, 255) solid;
+    border: 2px var(--color_button-active) solid;
     border-radius: 10px; 
+    transition-duration: var(--transition-time);
     &:hover{
-        cursor:help;
-        color:rgb(193, 194, 255)
+        cursor: pointer;
+        background-color: var(--color_button-hover);
     }
     &:active{
-
+        background-color: var(--color_button-active);
     }
 }
+
+.editbutton{
+    background-color: var(--color_button);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 30px;
+    height:30px;
+    margin-left:auto;
+    align-self: center;
+    border: 2px var(--color_button-active) solid;
+    border-radius: 10px; 
+    transition-duration: var(--transition-time);
+    &:hover{
+        cursor: pointer;
+        background-color: var(--color_button-hover);
+    }
+    &:active{
+        background-color: var(--color_button-active);
+    }
+}
+
+.deletebutton{
+    color:rgb(255, 215, 215);
+    background-color: var(--color_button_danger);
+    border-color: var(--color_button-active_danger);
+    &:hover{
+        cursor: pointer;
+        background-color: var(--color_button-hover_danger);
+    }
+    &:active{
+        background-color: var(--color_button-active_danger);
+    }
+}
+
+/* Credit to Tim Down on StackOverflow */
+*.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+ 
+    /*
+      Introduced in IE 10.
+      See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+    */
+    -ms-user-select: none;
+    user-select: none;
+}
+
