@@ -5,56 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Clients</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="../static/script.js"></script>
   </head>
   <body>
+    <div class= content>
     <h1>Clients</h1>
-    <nav>
-        [ <a href="/">HOME</a> |
-        <a href="/clients">Clients</a> |
-        <a href="/employees">Employees</a> |
-        <a href="/assigned_caterers">Assigned Caterers</a> |
-        <a href="/events">Events</a> |
-        <a href="/menus">Menus</a> |
-        <a href="/items">Items</a> |
-        <a href="/item_ingredients">Item Ingredients</a> |
-        <a href="/ingredients">Ingredients</a> ]
-    </nav>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Client ID</th>
-                <th>Client Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>John Doe</td>
-                <td>johndoe@example.com</td>
-                <td>(123) 456-7890</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jane Smith</td>
-                <td>janesmith@example.com</td>
-                <td>(987) 654-3210</td>
-            </tr>
-        </tbody>
-    </table>
+    
+    <div class="entrylist" id="mainlist">
+        <div class="list-element client-list-element">
+            <div>Jinkies Floofer</div>
+            <div>jfloof@hotmail.com</div>
+            <div>800-588-2300</div>
+            <div class="editbutton unselectable" title="Edit
+(⇧ Shift + Click to Delete)"><span class="material-symbols-outlined">
+                        edit
+                    </span></div>
+        </div>
+    </div>
 
     <h3>Add New Client</h3>
     <form id="client-form" style="border: 2px solid black;">
-        <label>Client Name: <input type="text" id="name" required></label><br>
-        <label>Email: <input type="email" id="email" required></label><br>
-        <label>Phone: <input type="tel" id="phone" required></label><br>
-        <button type="button" onclick="addClient()">Add Client</button><br>
+        <label style="grid-area:name;">Client Name: <input type="text" id="name" required></label>
+        <label style="grid-area:email;">Email: <input type="email" id="email" required></label>
+        <label style="grid-area:phone;">Phone: <input type="tel" id="phone" required></label>
+        <button type="button" onclick="addClient()" style="grid-area:submit;">Add Client</button>
     </form>
 
 
     <script src="index.js"></script>
+    </div>
   </body>
 </html>

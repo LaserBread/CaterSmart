@@ -134,7 +134,6 @@ footer.content{
     display:grid;
     justify-content: center;
     align-items: center;
-    grid-template-columns: 6fr 1fr 1fr 1fr 1fr;
     height:fit-content;
     padding: 10px;
 
@@ -145,6 +144,12 @@ footer.content{
     &:nth-child(odd){
         background-color: grey;
     }
+}
+.employee-list-element{
+    grid-template-columns: 4fr 2fr 1fr 1fr 1fr 1fr;
+}
+.client-list-element{
+    grid-template-columns: 3fr 3fr 2fr 1fr;    
 }
 
 .iconbox{
@@ -221,13 +226,14 @@ button{
 }
 
 input{
-    min-width: 50px;
+    min-width: 30px;
     min-height: 30px;
+    padding:0;
     border-radius: var(--round-radius);
 }
 
 text{
-    
+    padding:0;
 }
 
 #employee-form{
@@ -241,3 +247,14 @@ text{
     "driver driver food food alcohol alcohol"
     "submit submit submit submit submit submit"; 
 }
+
+#client-form {
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "name name"
+      "email phone"
+      "submit del"; 
+  }
