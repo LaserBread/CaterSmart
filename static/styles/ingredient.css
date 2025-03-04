@@ -1,0 +1,40 @@
+@import url("base.css");
+
+.ingredient-list-element {
+    grid-template-columns: 2fr 1fr 1fr 2fr 1fr;
+}
+
+#ingredient-form{
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "name qty"
+      "unit price"
+      "submit del"; 
+}
+
+.g-name{
+    grid-area: name;
+}
+
+.g-qty{
+    grid-area: qty;
+}
+
+.g-unit{
+    grid-area: unit;
+}
+
+.g-price{
+    grid-area: price;
+}
+
+.g-submit{
+    grid-area: submit;
+}
+
+.g-del{
+    grid-area: delete;
+}

@@ -1,3 +1,7 @@
+/*======== EXTERNAL RESOURCES ===============================================*/
+/* Include Google Material Icons. You can pick them at https://fonts.google.com/icons, but you have to list the ones you want in alphabetical order for some unknown reason*/
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=delete,directions_car,edit,local_bar,no_drinks,no_meals,restaurant");
+/*===========================================================================*/
 
 * {
     font-family: sans-serif;
@@ -145,16 +149,9 @@ footer.content{
         background-color: grey;
     }
 }
-.employee-list-element{
-    grid-template-columns: 4fr 2fr 1fr 1fr 1fr 1fr;
-}
-.client-list-element{
-    grid-template-columns: 3fr 3fr 2fr 1fr;    
-}
 
 .iconbox{
     margin-left:auto;
-
 }
 
 button{
@@ -236,25 +233,3 @@ text{
     padding:0;
 }
 
-#employee-form{
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; 
-    grid-template-rows: 1fr 1fr 1fr 1fr; 
-    gap: 0px 0px; 
-    grid-template-areas: 
-    "fname fname fname lname lname lname"
-    "dob dob dob dob dob dob"
-    "driver driver food food alcohol alcohol"
-    "submit submit submit submit submit submit"; 
-}
-
-#client-form {
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    grid-template-rows: 1fr 1fr 1fr; 
-    gap: 0px 0px; 
-    grid-template-areas: 
-      "name name"
-      "email phone"
-      "submit del"; 
-  }

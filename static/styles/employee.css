@@ -1,0 +1,17 @@
+@import url("base.css");
+
+.employee-list-element{
+    grid-template-columns: 4fr 2fr 1fr 1fr 1fr 1fr;
+}
+
+#employee-form{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+    "fname fname fname lname lname lname"
+    "dob dob dob dob dob dob"
+    "driver driver food food alcohol alcohol"
+    "submit submit submit submit submit submit"; 
+}

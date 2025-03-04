@@ -1,0 +1,17 @@
+@import url("base.css");
+
+
+.client-list-element{
+    grid-template-columns: 3fr 3fr 2fr 1fr;    
+}
+
+#client-form {
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "name name"
+      "email phone"
+      "submit del"; 
+  }

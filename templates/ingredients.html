@@ -1,61 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ingredients</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  </head>
-  <body>
-    <h1>Ingredients</h1>
-    <nav>
-        [ <a href="/">HOME</a> |
-        <a href="/clients">Clients</a> |
-        <a href="/employees">Employees</a> |
-        <a href="/assigned_caterers">Assigned Caterers</a> |
-        <a href="/events">Events</a> |
-        <a href="/menus">Menus</a> |
-        <a href="/items">Items</a> |
-        <a href="/item_ingredients">Item Ingredients</a> |
-        <a href="/ingredients">Ingredients</a> ]
-    </nav>
+    <link rel="stylesheet" href="../static/styles/ingredient.css">
+    <script src="../static/script.js"></script>
+</head>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Ingredient ID</th>
-                <th>Ingredient Name</th>
-                <th>Ingredient Quantity (in stock)</th>
-                <th>Unit</th>
-                <th>Unit Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Chicken</td>
-                <td>20</td>
-                <td>lb</td>
-                <td>5.50</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Red Wine</td>
-                <td>12</td>
-                <td>bottle</td>
-                <td>42.50</td>
-            </tr>
-        </tbody>
-    </table>
+<body>
+    <div class="content">
+        <h1>Ingredients</h1>
 
-    <h3>Add New Ingredient</h3>
-    <form id="ingredient-form" style="border: 2px solid black;">
-        <label>Ingredient Name: <input type="text" required></label><br>
-        <label>Ingredient Quantity (in stock): <input type="number" step="0.1"></label><br>
-        <label>Unit: <input type="text" required></label><br>
-        <label>Unit Price: <input type="number" step="0.01" required></label><br>
-        <button type="submit">Add Ingredient</button><br>
-    </form>
-  </body>
+        <div class="entrylist" id="mainlist">
+            <div class="list-element ingredient-list-element">
+                <div>Tomato</div>
+                <div>50</div>
+                <div>fruit</div>
+                <div>$0.80 ($40)</div>
+                <div class="editbutton unselectable" title="Edit
+(⇧ Shift + Click to Delete)"><span class="material-symbols-outlined">
+                        edit
+                    </span></div>
+            </div>
+        </div>
+
+        <h3>Add New Ingredient</h3>
+        <form id="ingredient-form" style="border: 2px solid black;">
+            <label class="g-name">Ingredient Name: <input type="text" required></label>
+            <label class="g-qty">Ingredient Quantity (in stock): <input type="number" step="0.1"></label>
+            <label class="g-unit">Unit: <input type="text" required></label>
+            <label class="g-price">Unit Price: <input type="number" step="0.01" required></label>
+            <button  class="g-submit" type="submit">Add Ingredient</button>
+        </form>
+    </div>
+</body>
+
 </html>
