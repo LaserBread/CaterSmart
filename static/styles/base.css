@@ -2,6 +2,7 @@
 /* Include Google Material Icons. You can pick them at https://fonts.google.com/icons, but you have to list the ones you want in alphabetical order for some unknown reason*/
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=delete,directions_car,edit,local_bar,no_drinks,no_meals,restaurant");
 /*===========================================================================*/
+@import url("g-defs.css");
 
 * {
     font-family: sans-serif;

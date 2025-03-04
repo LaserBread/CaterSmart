@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Employees</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/styles/employee.css">
     <script src="../static/script.js"></script>
 </head>
 
@@ -50,19 +50,19 @@
         <div class="editpane" id="editpane">
             <h3>Add New Employee</h3>
             <form id="employee-form" style="border: 2px solid rgb(240, 240, 240);">
-                <label style="grid-area:fname;">First Name: <input type="text" required></label>
-                <label style="grid-area:lname;">Last Name: <input type="text" required></label>
-                <label style="grid-area:dob;">Birthdate: <input type="date" required></label>
-                <label style="grid-area:driver;">Drivers' License:
+                <label class="g-fname">First Name: <input type="text" required></label>
+                <label class="g-lname">Last Name: <input type="text" required></label>
+                <label class="g-dob">Birthdate: <input type="date" required></label>
+                <label class="g-driver">Drivers' License:
                     <input type="checkbox">
                 </label>
-                <label style="grid-area:food;">Food Certification:
+                <label class="g-food">Food Certification:
                     <input type="checkbox"><span class="check"></span>
                 </label>
-                <label style="grid-area:alcohol;">Alcohol Certification:
+                <label class="g-alcohol">Alcohol Certification:
                     <input type="checkbox">
                 </label>
-                <button type="submit" style="grid-area:submit;">Add Employee</button>
+                <button type="submit" class="g-submit">Add Employee</button>
             </form>
 
 

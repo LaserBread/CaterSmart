@@ -1,0 +1,55 @@
+.g-name {
+    grid-area: name;
+}
+
+.g-email {
+    grid-area: email;
+}
+
+.g-phone {
+    grid-area: phone;
+}
+
+.g-qty {
+    grid-area: qty;
+}
+
+.g-submit {
+    grid-area: submit;
+}
+
+.g-del {
+    grid-area: delete;
+}
+
+.g-price {
+    grid-area: price;
+}
+
+.g-unit {
+    grid-area: unit;
+}
+
+.g-fname {
+    grid-area: fname;
+}
+
+.g-lname {
+    grid-area: lname;
+}
+
+.g-dob {
+    grid-area: dob;
+}
+
+.g-food {
+    grid-area: food;
+}
+
+.g-alcohol {
+    grid-area: alcohol;
+}
+
+.g-driver {
+    grid-area: driver;
+}

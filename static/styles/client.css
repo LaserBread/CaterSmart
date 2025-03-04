@@ -1,6 +1,5 @@
 @import url("base.css");
 
-
 .client-list-element{
     grid-template-columns: 3fr 3fr 2fr 1fr;    
 }
@@ -14,4 +13,5 @@
       "name name"
       "email phone"
       "submit del"; 
-  }
+}
+
