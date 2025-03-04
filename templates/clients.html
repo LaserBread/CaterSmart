@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Clients</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/styles/client.css">
     <script src="../static/script.js"></script>
   </head>
   <body>
@@ -26,10 +26,10 @@
 
     <h3>Add New Client</h3>
     <form id="client-form" style="border: 2px solid black;">
-        <label style="grid-area:name;">Client Name: <input type="text" id="name" required></label>
-        <label style="grid-area:email;">Email: <input type="email" id="email" required></label>
-        <label style="grid-area:phone;">Phone: <input type="tel" id="phone" required></label>
-        <button type="button" onclick="addClient()" style="grid-area:submit;">Add Client</button>
+        <label class="g-name">Client Name: <input type="text" id="name" required></label>
+        <label class="g-email">Email: <input type="email" id="email" required></label>
+        <label class="g-phone">Phone: <input type="tel" id="phone" required></label>
+        <button type="button" onclick="addClient()" class="g-submit">Add Client</button>
     </form>
 
 
