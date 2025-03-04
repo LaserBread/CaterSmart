@@ -49,7 +49,9 @@ CREATE TABLE IF NOT EXISTS ItemIngredients (
     FOREIGN KEY (item_id) REFERENCES Items(item_id)
         ON DELETE CASCADE,
     FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id)
-        ON DELETE CASCADE   -- when item or ingredient is deleted, remove connections
+        ON DELETE CASCADE,   -- when item or ingredient is deleted, remove connections
+    CONSTRAINT UQ_ITEMINGREDIENT UNIQUE (item_id, ingredient_id)
+    -- There can only be one usage of an item in an ingredient
 );
 
 -- Query to create the Employees table
@@ -89,7 +91,9 @@ CREATE TABLE IF NOT EXISTS AssignedCaterers (
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
         ON DELETE CASCADE,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
-        ON DELETE CASCADE       -- when event or employee is deleted, remove assignments
+        ON DELETE CASCADE,       -- when event or employee is deleted, remove assignments
+    CONSTRAINT UQ_ASSIGNMENTS UNIQUE (event_id, employee_id)
+    -- An employee cannot be assigned to the same event more than once
 );
 
 -------------------------------------------------------------------------------------------
@@ -128,7 +132,7 @@ INSERT INTO Employees (
 VALUES (
     "Jeb",
     "Jab",
-    '1998-01-15',
+    '1994-11-16',
     TRUE,
     FALSE,
     TRUE
