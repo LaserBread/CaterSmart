@@ -21,6 +21,17 @@
         <a href="/ingredients">Ingredients</a> ]
     </nav>
 
+    <!-- Flash Message Section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <table border="1">
         <thead>
             <tr>
@@ -31,27 +42,24 @@
             </tr>
         </thead>
         <tbody>
+            {% for row in data %}
             <tr>
-                <td>1</td>
-                <td>John Doe</td>
-                <td>johndoe@example.com</td>
-                <td>(123) 456-7890</td>
+                <td>{{ row.client_id }}</td>
+                <td>{{ row.client_name }}</td>
+                <td>{{ row.email }}</td>
+                <td>{{ row.phone_number }}</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>Jane Smith</td>
-                <td>janesmith@example.com</td>
-                <td>(987) 654-3210</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
+    <!--The "name" fields in the input tags tie the input form to Flask-->
     <h3>Add New Client</h3>
-    <form id="client-form" style="border: 2px solid black;">
-        <label>Client Name: <input type="text" id="name" required></label><br>
-        <label>Email: <input type="email" id="email" required></label><br>
-        <label>Phone: <input type="tel" id="phone" required></label><br>
-        <button type="button" onclick="addClient()">Add Client</button><br>
+    <form id="client-form" style="border: 2px solid black;" method="POST">
+        <label>Client Name: <input type="text" name="client_name" required></label><br>
+        <label>Email: <input type="email" name="email" required></label><br>
+        <label>Phone: <input type="tel" name="phone_number" required></label><br>
+        <button type="submit">Add Client</button><br>
     </form>
 
 

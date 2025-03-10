@@ -46,6 +46,13 @@ SELECT employee_id, first_name, last_name, birthdate, has_drivers_license, has_a
 SELECT event_id, client_id, menu_id, event_start, event_end, event_address, event_type
    FROM Events
 
+-- Select an event (with client name and menu name added)
+SELECT Events.event_id, Events.client_id, Clients.client_name, Events.menu_id, Menus.menu_name, Events.event_start, Events.event_end, Events.event_address, Events.event_type
+FROM Events
+INNER JOIN Clients ON Events.client_id = Clients.client_id
+INNER JOIN Menus ON Events.menu_id = Menus.menu_id
+ORDER BY Events.event_id ASC;
+
 -- Select a menu
 SELECT menu_id, menu_name
    FROM Menus
