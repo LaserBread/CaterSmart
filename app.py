@@ -117,21 +117,21 @@ def employees():
 def events():
     if request.method == 'POST':
         # add new event
+        event_name = request.form['event_name']
         client_id = request.form['client_id']
         menu_id = request.form['menu_id']
         event_start = request.form['event_start']
         event_end = request.form['event_end']
         event_address = request.form['event_address']
-        event_type = request.form['event_type']
         
         cur = mysql.connection.cursor()
 
         # try/except block
         try:
             cur.execute("""
-                INSERT INTO Events (client_id, menu_id, event_start, event_end, event_address, event_type)
+                INSERT INTO Events (event_name, client_id, menu_id, event_start, event_end, event_address)
                 VALUES (%s, %s, %s, %s, %s, %s)
-            """, (client_id, menu_id, event_start, event_end, event_address, event_type))
+            """, (event_name, client_id, menu_id, event_start, event_end, event_address))
             mysql.connection.commit()
             flash('Event added successfully!', 'success')
         except MySQLdb.IntegrityError as e:
@@ -152,11 +152,11 @@ def events():
     #cur.execute("SELECT event_id, client_id, menu_id, event_start, event_end, event_address, event_type FROM Events")
     # query2:
     cur.execute("""
-        SELECT Events.event_id, Events.client_id, Clients.client_name, Events.menu_id, Menus.menu_name, Events.event_start, Events.event_end, Events.event_address, Events.event_type
+        SELECT Events.event_id, Events.event_name, Events.client_id, Clients.client_name, Events.menu_id, Menus.menu_name, Events.event_start, Events.event_end, Events.event_address
         FROM Events
         INNER JOIN Clients ON Events.client_id = Clients.client_id
         INNER JOIN Menus ON Events.menu_id = Menus.menu_id
-        ORDER BY Events.event_id ASC
+        ORDER BY Events.event_id ASC;
     """)
     data = cur.fetchall()
     cur.close()

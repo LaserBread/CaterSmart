@@ -36,6 +36,7 @@
         <thead>
             <tr>
                 <th>Event ID</th>
+                <th>Event Name</th>
                 <th>Client ID</th>
                 <th>(Client Name)</th>
                 <th>Menu ID</th>
@@ -43,7 +44,6 @@
                 <th>Event Start</th>
                 <th>Event End</th>
                 <th>Event Address</th>
-                <th>Event Type</th>
                 <th>Edit</th>
             </tr>
         </thead>
@@ -51,6 +51,7 @@
             {% for row in data %}
             <tr>
                 <td>{{ row.event_id }}</td>
+                <td>{{ row.event_name }}</td>
                 <td>{{ row.client_id }}</td>
                 <td>{{ row.client_name }}</td>
                 <td>{{ row.menu_id }}</td>
@@ -58,8 +59,7 @@
                 <td>{{ row.event_start }}</td>
                 <td>{{ row.event_end }}</td>
                 <td>{{ row.event_address }}</td>
-                <td>{{ row.event_type }}</td>
-                <button onclick="editEvent(this)">Edit</button>
+                <td><button onclick="editEvent(this)">Edit</button></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -68,6 +68,7 @@
     <h3>Add New Event</h3>
     <form id="event-form" action="/events" style="border: 2px solid black;" method="POST">
         <!-- <label>Client ID: <input type="number" id="client-id" required></label><br> -->
+        <label>Event Name: <input type="text" name="event_name" required></label><br>
         <label>Client ID: 
             <select name="client_id">
                 <option value="1">1</option>
@@ -84,15 +85,6 @@
         <label>Event Start: <input type="datetime-local" name="even_start" required></label><br>
         <label>Event End: <input type="datetime-local" name="event_end" required></label><br>
         <label>Address: <input type="text" name="event_address" required></label><br>
-        <label>Event Type:
-            <select name="event_type" required>
-                <option value="Wedding">Wedding</option>
-                <option value="Corporate">Corporate</option>
-                <option value="Birthday">Birthday</option>
-                <option value="Reunion">Reunion</option>
-                <option value="Other">Other</option>
-            </select>
-        </label><br>
         <button type="submit">Add Event</button><br>
     </form>
 
