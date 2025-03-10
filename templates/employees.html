@@ -21,6 +21,17 @@
         <a href="/ingredients">Ingredients</a> ]
     </nav>
 
+    <!-- Flash Message Section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <table border="1">
         <thead>
             <tr>
@@ -34,46 +45,39 @@
             </tr>
         </thead>
         <tbody>
+            {% for row in data %}
             <tr>
-                <td>1</td>
-                <td>Alice</td>
-                <td>Johnson</td>
-                <td>01/01/1997</td>
-                <td>True</td>
-                <td>True</td>
-                <td>True</td>
+                <td>{{ row.employee_id }}</td>
+                <td>{{ row.first_name }}</td>
+                <td>{{ row.last_name }}</td>
+                <td>{{ row.birthdate }}</td>
+                <td>{{ row.has_drivers_license }}</td>
+                <td>{{ row.has_alcohol_certification }}</td>
+                <td>{{ row.has_food_certification }}</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>Daniel</td>
-                <td>Thompson</td>
-                <td>02/02/2007</td>
-                <td>True</td>
-                <td>False</td>
-                <td>True</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
     <h3>Add New Employee</h3>
-    <form id="employee-form" style="border: 2px solid black;">
-        <label>First Name: <input type="text" required></label><br>
-        <label>Last Name: <input type="text" required></label><br>
-        <label>Birthdate: <input type="date" required></label><br>
+    <form id="employee-form" style="border: 2px solid black;" method="POST">
+        <label>First Name: <input type="text" name="first_name" required></label><br>
+        <label>Last Name: <input type="text" name="last_name" required></label><br>
+        <label>Birthdate: <input type="date" name="birthdate" required></label><br>
         <label>Drivers' License: 
-            <select required>
+            <select name="has_drivers_license" required>
                 <option value="True">True</option>
                 <option value="False">False</option>
             </select>
         </label><br>
         <label>Alcohol Certification: 
-            <select required>
+            <select name="has_alcohol_certification" required>
                 <option value="True">True</option>
                 <option value="False">False</option>
             </select>
         </label><br>
         <label>Food Certification: 
-            <select required>
+            <select name="has_food_certification" required>
                 <option value="True">True</option>
                 <option value="False">False</option>
             </select>

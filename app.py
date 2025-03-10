@@ -1,11 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_mysqldb import MySQL
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_mysqldb import MySQL, MySQLdb
 from dotenv import load_dotenv
 import os
+from MySQLdb import IntegrityError
 
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)     # for flashing messages
 
 # Configure MySQL connection
 app.config["MYSQL_HOST"] = "classmysql.engr.oregonstate.edu"
@@ -21,17 +23,182 @@ def index():
     return render_template('index.html')  
 
 # currently for STEP 4: just rendering other pages, not connected to db/functional
-@app.route('/clients')
+'''CLIENTS page'''
+@app.route('/clients', methods=['GET', 'POST'])
 def clients():
-    return render_template('clients.html')
+    if request.method == 'POST':
+        # add new client
+        client_name = request.form['client_name']
+        phone_number = request.form['phone_number']
+        email = request.form['email']
+        cur = mysql.connection.cursor()
 
-@app.route('/employees')
+        # try/except block
+        try:
+            cur.execute("""
+                INSERT INTO Clients (client_name, phone_number, email)
+                VALUES (%s, %s, %s)
+            """, (client_name, phone_number, email))
+            mysql.connection.commit()
+            flash('Client added successfully!', 'success')
+        except MySQLdb.IntegrityError as e:
+            # # this is the error raised when the UNIQUE constraint is violated
+            # if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry
+            #     flash('This employee is already assigned to this event.', 'danger')
+            # else:
+            #     flash('An unexpected error occurred.', 'danger')
+            pass
+        finally:
+            cur.close()
+        
+        return redirect(url_for('clients'))
+
+    # display the clients table
+    cur = mysql.connection.cursor()
+    # query:
+    cur.execute("SELECT client_id, client_name, phone_number, email FROM Clients")
+    data = cur.fetchall()
+    cur.close()
+
+    return render_template('clients.html', data=data)
+
+'''EMPLOYEES page'''
+@app.route('/employees', methods=['GET', 'POST'])
 def employees():
-    return render_template('employees.html')
+    if request.method == 'POST':
+        # add new employee
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        birthdate = request.form['birthdate']
+        # handle boolean inputs
+        has_drivers_license = True if request.form['has_drivers_license'] == 'True' else False
+        has_alcohol_certification = True if request.form['has_alcohol_certification'] == 'True' else False
+        has_food_certification = True if request.form['has_food_certification'] == 'True' else False
 
-@app.route('/events')
+        cur = mysql.connection.cursor()
+
+        # try/except block
+        try:
+            cur.execute("""
+                INSERT INTO Employees (first_name, last_name, birthdate, has_drivers_license, has_alcohol_certification, has_food_certification)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (first_name, last_name, birthdate, has_drivers_license, has_alcohol_certification, has_food_certification))
+            mysql.connection.commit()
+            flash('Employee added successfully!', 'success')
+        except MySQLdb.IntegrityError as e:
+            # # this is the error raised when the UNIQUE constraint is violated
+            # if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry
+            #     flash('This employee is already assigned to this event.', 'danger')
+            # else:
+            #     flash('An unexpected error occurred.', 'danger')
+            pass
+        finally:
+            cur.close()
+    
+        return redirect(url_for('employees'))
+
+    # display the employees table
+    cur = mysql.connection.cursor()
+    # query:
+    cur.execute("SELECT employee_id, first_name, last_name, birthdate, has_drivers_license, has_alcohol_certification, has_food_certification FROM Employees")
+    data = cur.fetchall()
+    cur.close()
+
+    # convert 0/1 to True/False
+    for row in data:
+        row['has_drivers_license'] = 'True' if row['has_drivers_license'] else 'False'
+        row['has_alcohol_certification'] = 'True' if row['has_alcohol_certification'] else 'False'
+        row['has_food_certification'] = 'True' if row['has_food_certification'] else 'False'
+    
+    return render_template('employees.html', data=data)
+
+'''EVENTS page'''
+@app.route('/events', methods=['GET', 'POST'])
 def events():
-    return render_template('events.html')
+    if request.method == 'POST':
+        # add new event
+        client_id = request.form['client_id']
+        menu_id = request.form['menu_id']
+        event_start = request.form['event_start']
+        event_end = request.form['event_end']
+        event_address = request.form['event_address']
+        event_type = request.form['event_type']
+        
+        cur = mysql.connection.cursor()
+
+        # try/except block
+        try:
+            cur.execute("""
+                INSERT INTO Events (client_id, menu_id, event_start, event_end, event_address, event_type)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (client_id, menu_id, event_start, event_end, event_address, event_type))
+            mysql.connection.commit()
+            flash('Event added successfully!', 'success')
+        except MySQLdb.IntegrityError as e:
+            # # this is the error raised when the UNIQUE constraint is violated
+            # if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry
+            #     flash('This employee is already assigned to this event.', 'danger')
+            # else:
+            #     flash('An unexpected error occurred.', 'danger')
+            pass
+        finally:
+            cur.close()
+    
+        return redirect(url_for('events'))
+
+    # display the events table
+    cur = mysql.connection.cursor()
+    # query1:
+    #cur.execute("SELECT event_id, client_id, menu_id, event_start, event_end, event_address, event_type FROM Events")
+    # query2:
+    cur.execute("""
+        SELECT Events.event_id, Events.client_id, Clients.client_name, Events.menu_id, Menus.menu_name, Events.event_start, Events.event_end, Events.event_address, Events.event_type
+        FROM Events
+        INNER JOIN Clients ON Events.client_id = Clients.client_id
+        INNER JOIN Menus ON Events.menu_id = Menus.menu_id
+        ORDER BY Events.event_id ASC
+    """)
+    data = cur.fetchall()
+    cur.close()
+
+    return render_template('events.html', data=data)
+
+'''UPDATE EVENT route'''
+# @app.route('/update_event', methods=['POST'])
+# def update_assignment():
+#     client_id = request.form['client_id']
+#     menu_id = request.form['menu_id']
+#     event_start = request.form['event_start']
+#     event_end = request.form['event_end']
+#     event_address = request.form['event_address']
+#     event_type = request.form['event_type']
+
+#     event_id = request.form['event_id']
+
+#     cur = mysql.connection.cursor()
+
+#     # try/except block
+#     try:
+#         cur.execute("""
+#             UPDATE Events
+#             SET
+#                 client_id = %s,
+#                 menu_id = %s, 
+#                 event_start = %s,
+#                 event_end = %s,
+#                 event_address = %s,
+#                 event_type = %s
+#             WHERE event_id = %s;
+#         """, (client_id, menu_id, event_start, event_end, event_address, event_type, event_id))
+#         mysql.connection.commit()
+#         flash('Event updated successfully!', 'success')
+#     except MySQLdb.IntegrityError:
+#         #flash('This employee/event combination already exists.', 'danger')
+#         pass
+#     finally:
+#         cur.close()
+
+#     return redirect(url_for('events'))
 
 @app.route('/menus')
 def menus():
@@ -49,21 +216,37 @@ def item_ingredients():
 def ingredients():
     return render_template('ingredients.html')
 
+'''ASSIGNED_CATERERS page'''
 @app.route('/assigned_caterers', methods=['GET', 'POST'])
 def assigned_caterers():
     if request.method == 'POST':
-        # Add new assignment
+        # add new assignment
         employee_id = request.form['employee_id']
         event_id = request.form['event_id']
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO AssignedCaterers (employee_id, event_id) VALUES (%s, %s)", (employee_id, event_id))
-        mysql.connection.commit()
-        cur.close()
+
+        # try/except block: handles when user attempts to assign caterer to event they're already assigned to
+        try:
+            cur.execute("""
+                INSERT INTO AssignedCaterers (employee_id, event_id)
+                VALUES (%s, %s)
+            """, (employee_id, event_id))
+            mysql.connection.commit()
+            flash('Caterer assigned successfully!', 'success')
+        except MySQLdb.IntegrityError as e:
+            # this is the error raised when the UNIQUE constraint is violated
+            if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry
+                flash('This employee is already assigned to this event.', 'danger')
+            else:
+                flash('An unexpected error occurred.', 'danger')
+        finally:
+            cur.close()
+
         return redirect(url_for('assigned_caterers'))
 
-    # Display the assigned caterers table
+    # display the assigned caterers table
     cur = mysql.connection.cursor()
-    # query to display employee_id, employee's full name, and event_id
+    # query:
     cur.execute("""
                 SELECT AssignedCaterers.assigned_caterers_id, AssignedCaterers.employee_id, 
                     CONCAT(Employees.first_name, ' ', Employees.last_name) AS caterer_name, AssignedCaterers.event_id 
@@ -84,17 +267,30 @@ def assigned_caterers():
 
     return render_template('assigned_caterers.html', data=data, employees=employees, events=events)
 
+'''UPDATE ASSIGNED_CATERERS route'''
 @app.route('/update_assignment', methods=['POST'])
 def update_assignment():
     assignment_id = request.form['assignment_id']
     employee_id = request.form['employee_id']
     event_id = request.form['event_id']
     cur = mysql.connection.cursor()
-    cur.execute("UPDATE AssignedCaterers SET employee_id = %s, event_id = %s WHERE assigned_caterers_id = %s", (employee_id, event_id, assignment_id))
-    mysql.connection.commit()
-    cur.close()
+
+    # try/except block: handles when user attempts to update assignment to have caterer/event combo that already exists
+    try:
+        cur.execute("""
+            UPDATE AssignedCaterers 
+            SET employee_id = %s, event_id = %s 
+            WHERE assigned_caterers_id = %s
+        """, (employee_id, event_id, assignment_id))
+        mysql.connection.commit()
+        flash('Assignment updated successfully!', 'success')
+    except MySQLdb.IntegrityError:
+        flash('This employee/event combination already exists.', 'danger')
+    finally:
+        cur.close()
     return redirect(url_for('assigned_caterers'))
 
+'''DELETE from ASSIGNED_CATERERS route'''
 @app.route('/delete_assignment/<int:id>')
 def delete_assignment(id):
     cur = mysql.connection.cursor()
