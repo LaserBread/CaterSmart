@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from MySQLdb import IntegrityError
 
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -23,7 +24,7 @@ def index():
     return render_template('index.html')  
 
 # currently for STEP 4: just rendering other pages, not connected to db/functional
-'''CLIENTS page'''
+'''SELECT/INSERT CLIENTS route'''
 @app.route('/clients', methods=['GET', 'POST'])
 def clients():
     if request.method == 'POST':
@@ -62,7 +63,7 @@ def clients():
 
     return render_template('clients.html', data=data)
 
-'''EMPLOYEES page'''
+'''SELECT/INSERT EMPLOYEES route'''
 @app.route('/employees', methods=['GET', 'POST'])
 def employees():
     if request.method == 'POST':
@@ -112,7 +113,7 @@ def employees():
     
     return render_template('employees.html', data=data)
 
-'''EVENTS page'''
+'''SELECT/INSERT EVENTS route'''
 @app.route('/events', methods=['GET', 'POST'])
 def events():
     if request.method == 'POST':
@@ -135,12 +136,11 @@ def events():
             mysql.connection.commit()
             flash('Event added successfully!', 'success')
         except MySQLdb.IntegrityError as e:
-            # # this is the error raised when the UNIQUE constraint is violated
-            # if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry
-            #     flash('This employee is already assigned to this event.', 'danger')
-            # else:
-            #     flash('An unexpected error occurred.', 'danger')
-            pass
+            if e.args[0] == 1062:  # duplicate event name
+                flash('An event with this name already exists. Please use a different name.', 'danger')
+                return redirect(url_for('events'))
+            # handle any other unexpected database error
+            flash('An unexpected error occurred. Please try again.', 'danger')
         finally:
             cur.close()
     
@@ -148,9 +148,7 @@ def events():
 
     # display the events table
     cur = mysql.connection.cursor()
-    # query1:
-    #cur.execute("SELECT event_id, client_id, menu_id, event_start, event_end, event_address, event_type FROM Events")
-    # query2:
+    # query:
     cur.execute("""
         SELECT Events.event_id, Events.event_name, Events.client_id, Clients.client_name, Events.menu_id, Menus.menu_name, Events.event_start, Events.event_end, Events.event_address
         FROM Events
@@ -159,46 +157,48 @@ def events():
         ORDER BY Events.event_id ASC;
     """)
     data = cur.fetchall()
-    cur.close()
 
-    return render_template('events.html', data=data)
+    # get data for client and menu dropdowns
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT client_id, client_name FROM Clients")
+    clients = cur.fetchall()
+    cur.execute("SELECT menu_id, menu_name FROM Menus")
+    menus = cur.fetchall()
+
+    return render_template('events.html', data=data, clients=clients, menus=menus)
 
 '''UPDATE EVENT route'''
-# @app.route('/update_event', methods=['POST'])
-# def update_assignment():
-#     client_id = request.form['client_id']
-#     menu_id = request.form['menu_id']
-#     event_start = request.form['event_start']
-#     event_end = request.form['event_end']
-#     event_address = request.form['event_address']
-#     event_type = request.form['event_type']
+@app.route('/update_event', methods=['POST'])
+def update_event():
+    event_id = request.form['event_id']
+    event_name = request.form['event_name']
+    menu_id = request.form['menu_id']
+    event_start = request.form['event_start']
+    event_end = request.form['event_end']
+    event_address = request.form['event_address']
 
-#     event_id = request.form['event_id']
 
-#     cur = mysql.connection.cursor()
+    cur = mysql.connection.cursor()
 
-#     # try/except block
-#     try:
-#         cur.execute("""
-#             UPDATE Events
-#             SET
-#                 client_id = %s,
-#                 menu_id = %s, 
-#                 event_start = %s,
-#                 event_end = %s,
-#                 event_address = %s,
-#                 event_type = %s
-#             WHERE event_id = %s;
-#         """, (client_id, menu_id, event_start, event_end, event_address, event_type, event_id))
-#         mysql.connection.commit()
-#         flash('Event updated successfully!', 'success')
-#     except MySQLdb.IntegrityError:
-#         #flash('This employee/event combination already exists.', 'danger')
-#         pass
-#     finally:
-#         cur.close()
-
-#     return redirect(url_for('events'))
+    # update the event
+    try:
+        cur.execute("""
+            UPDATE Events 
+            SET event_name = %s,
+                menu_id = %s, 
+                event_start = %s, 
+                event_end = %s, 
+                event_address = %s
+            WHERE event_id = %s
+        """, (event_name, menu_id, event_start, event_end, event_address, event_id))
+        
+        mysql.connection.commit()
+        flash("Event updated successfully!", "success")
+    except MySQLdb.Error as e:
+        flash("An event with this name already exists. Please try again.", "danger")
+    finally:
+        cur.close()
+    return redirect(url_for('events'))
 
 @app.route('/menus')
 def menus():
@@ -216,7 +216,7 @@ def item_ingredients():
 def ingredients():
     return render_template('ingredients.html')
 
-'''ASSIGNED_CATERERS page'''
+'''SELECT/INSERT ASSIGNED_CATERERS route'''
 @app.route('/assigned_caterers', methods=['GET', 'POST'])
 def assigned_caterers():
     if request.method == 'POST':
@@ -261,7 +261,7 @@ def assigned_caterers():
     cur = mysql.connection.cursor()
     cur.execute("SELECT employee_id, CONCAT(first_name, ' ', last_name) AS name FROM Employees")
     employees = cur.fetchall()
-    cur.execute("SELECT event_id FROM Events")
+    cur.execute("SELECT event_id, event_name FROM Events")
     events = cur.fetchall()
     cur.close()
 
