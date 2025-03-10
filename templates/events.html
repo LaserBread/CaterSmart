@@ -67,68 +67,99 @@
 
     <h3>Add New Event</h3>
     <form id="event-form" action="/events" style="border: 2px solid black;" method="POST">
-        <!-- <label>Client ID: <input type="number" id="client-id" required></label><br> -->
         <label>Event Name: <input type="text" name="event_name" required></label><br>
-        <label>Client ID: 
+        
+        <label>Client (ID - name): 
             <select name="client_id">
-                <option value="1">1</option>
-                <option value="2">2</option>
+                {% for client in clients %}
+                <option value="{{ client.client_id }}">{{ client.client_id }} - {{ client.client_name }}</option>
+                {% endfor %}
             </select>
         </label><br>
-        <!-- <label>Menu ID: <input type="number" id="menu-id" required></label><br> -->
-        <label>Menu ID: 
+        
+        <label>Menu (ID - name): 
             <select name="menu_id">
-                <option value="1">1</option>
-                <option value="2">2</option>
+                {% for menu in menus %}
+                <option value="{{ menu.menu_id }}">{{ menu.menu_id }} - {{ menu.menu_name }}</option>
+                {% endfor %}
             </select>
         </label><br>
-        <label>Event Start: <input type="datetime-local" name="even_start" required></label><br>
+        
+        <label>Event Start: <input type="datetime-local" name="event_start" required></label><br>
         <label>Event End: <input type="datetime-local" name="event_end" required></label><br>
         <label>Address: <input type="text" name="event_address" required></label><br>
+        
         <button type="submit">Add Event</button><br>
     </form>
+    
 
     <h3>Edit Event</h3>
     <form id="edit-event-form" action="/update_event" method="POST" style="border: 2px solid black; display: none;">
         <input type="hidden" id="edit-event-id" name="event_id">
+    
+        <label>Event Name: 
+            <input type="text" id="edit-event-name" name="event_name" required>
+        </label><br>
+
         <label>Event Menu: 
-            <input type="text" id="edit-event-menu" name="menu_id">
+            <select id="edit-event-menu" name="menu_id">
+                {% for menu in menus %}
+                    <option value="{{ menu.menu_id }}">{{ menu.menu_name }}</option>
+                {% endfor %}
+            </select>
         </label><br>
+    
         <label>Event Start: 
-            <input type="datetime-local" id="edit-event-start" name="event_start">
+            <input type="datetime-local" id="edit-event-start" name="event_start" required>
         </label><br>
+    
         <label>Event End: 
-            <input type="datetime-local" id="edit-event-end" name="event_end">
+            <input type="datetime-local" id="edit-event-end" name="event_end" required>
         </label><br>
+    
         <label>Address: 
-            <input type="text" id="edit-event-address" name="event_address">
+            <input type="text" id="edit-event-address" name="event_address" required>
         </label><br>
+    
         <button type="submit">Save Changes</button>
         <button type="button" onclick="cancelEdit()">Cancel</button>
     </form>
+    
 
     <script>
         function editEvent(button) {
-            // get the row of the clicked button
             let row = button.parentNode.parentNode;
             let cells = row.getElementsByTagName("td");
-
-            // populate the edit form fields
+    
+            // Populate hidden input for Event ID
             document.getElementById("edit-event-id").value = cells[0].innerText;
-            document.getElementById("edit-event-menu").value = cells[1].innerText;
-            document.getElementById("edit-event-start").value = cells[2].innerText;
-            document.getElementById("edit-event-end").value = cells[3].innerText;
-            document.getElementById("edit-event-address").value = cells[4].innerText;
-
-            // show the edit form
+            
+            // populate name/start/end/address
+            document.getElementById("edit-event-name").value = cells[1].innerText;
+            document.getElementById("edit-event-start").value = cells[6].innerText;
+            document.getElementById("edit-event-end").value = cells[7].innerText;
+            document.getElementById("edit-event-address").value = cells[8].innerText;
+    
+            // Handle the Menu Dropdown Pre-Selection
+            let menuDropdown = document.getElementById("edit-event-menu");
+            let currentMenuId = cells[4].innerText;  // Menu ID in the row
+            
+            for (let i = 0; i < menuDropdown.options.length; i++) {
+                if (menuDropdown.options[i].value === currentMenuId) {
+                    menuDropdown.selectedIndex = i;
+                    break;
+                }
+            }
+    
+            // Show the Edit Form
             document.getElementById("edit-event-form").style.display = "block";
         }
-
+    
         function cancelEdit() {
             document.getElementById("edit-event-form").style.display = "none";
         }
-
     </script>
+    
 
   </body>
 </html>
