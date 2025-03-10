@@ -1,11 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_mysqldb import MySQL
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_mysqldb import MySQL, MySQLdb
 from dotenv import load_dotenv
 import os
+from MySQLdb import IntegrityError
+
 
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)     # for flashing messages
 
 # Configure MySQL connection
 app.config["MYSQL_HOST"] = "classmysql.engr.oregonstate.edu"
