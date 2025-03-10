@@ -8,8 +8,8 @@ INSERT INTO Employees (first_name, last_name, birthdate, has_drivers_license, ha
 VALUES (:first_name, :last_name, :birthdate, :has_drivers_license, :has_alcohol_certification, :has_food_certification);
 
 -- Add an event
-INSERT INTO Events (client_id, menu_id, event_start, event_end, event_address, event_type)
-VALUES (:client_id, :menu_id, :event_start, :event_end, :event_address);
+INSERT INTO Events (client_id, event_name, menu_id, event_start, event_end, event_address)
+VALUES (:client_id, :event_name, :menu_id, :event_start, :event_end, :event_address);
 
 -- Add a menu
 INSERT INTO Menus (menu_name)
@@ -43,11 +43,11 @@ SELECT employee_id, first_name, last_name, birthdate, has_drivers_license, has_a
    FROM Employees
    
 -- Select an event
-SELECT event_id, client_id, menu_id, event_start, event_end, event_address, event_type
+SELECT event_id, event_name, client_id, menu_id, event_start, event_end, event_address
    FROM Events
 
 -- Select an event (with client name and menu name added)
-SELECT Events.event_id, Events.client_id, Clients.client_name, Events.menu_id, Menus.menu_name, Events.event_start, Events.event_end, Events.event_address, Events.event_type
+SELECT Events.event_id, Events.event_name, Events.client_id, Clients.client_name, Events.menu_id, Menus.menu_name, Events.event_start, Events.event_end, Events.event_address
 FROM Events
 INNER JOIN Clients ON Events.client_id = Clients.client_id
 INNER JOIN Menus ON Events.menu_id = Menus.menu_id
@@ -100,12 +100,12 @@ DELETE FROM AssignedCaterers WHERE assigned_caterers_id = :selected_id;
 
 -- Update an event
 UPDATE Events
-    SET client_id = :client_in,
+    SET event_name = :event_name_in 
+        client_id = :client_in,
         menu_id = :menu_in, 
         event_start = :start_in,
         event_end = :end_in,
         event_address = :address_in
-        event_type = :event_type_in
     WHERE event_id = :selected_id;
 
 -- Reassign/update an employee assignment to an event
