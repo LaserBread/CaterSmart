@@ -10,9 +10,17 @@
     <script src="../static/script.js"></script>
 </head>
 
-<body>
-
     <div class="content">
+        <!-- Flash Message Section -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <div class="entrylist" id="mainlist">
 
             <div class="list-element employee-list-element" id="employee_id-X">
@@ -71,6 +79,6 @@
             </div>
         </div>
     </div>
-</body>
+    </body>
 
 </html>

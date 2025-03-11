@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS Items (
 CREATE TABLE IF NOT EXISTS Ingredients (
     ingredient_id int NOT NULL UNIQUE AUTO_INCREMENT,
     ingredient_name varchar(50) NOT NULL UNIQUE,
-    ingredient_qty decimal(10) NOT NULL,
+    ingredient_qty decimal(10, 2) NOT NULL,
     unit varchar(10) NOT NULL,
     unit_price decimal(10, 2) NOT NULL,
     PRIMARY KEY (ingredient_id)
@@ -49,7 +49,9 @@ CREATE TABLE IF NOT EXISTS ItemIngredients (
     FOREIGN KEY (item_id) REFERENCES Items(item_id)
         ON DELETE CASCADE,
     FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id)
-        ON DELETE CASCADE   -- when item or ingredient is deleted, remove connections
+        ON DELETE CASCADE,   -- when item or ingredient is deleted, remove connections
+    CONSTRAINT UQ_ITEMINGREDIENT UNIQUE (item_id, ingredient_id)
+    -- There can only be one usage of an item in an ingredient
 );
 
 -- Query to create the Employees table
@@ -67,12 +69,12 @@ CREATE TABLE IF NOT EXISTS Employees (
 -- Query to create the Events table
 CREATE TABLE IF NOT EXISTS Events (
     event_id int NOT NULL UNIQUE AUTO_INCREMENT,
+    event_name varchar(255) NOT NULL UNIQUE,
     client_id int NOT NULL,
     menu_id int NOT NULL,
-    event_start timestamp NOT NULL,
-    event_end timestamp NOT NULL,
+    event_start datetime NOT NULL,
+    event_end datetime NOT NULL,
     event_address varchar(255) NOT NULL,
-    event_type varchar(50) NOT NULL,
     PRIMARY KEY (event_id),
     FOREIGN KEY (client_id) REFERENCES Clients(client_id)
         ON DELETE CASCADE,      -- when client is deleted, remove their events
@@ -89,7 +91,9 @@ CREATE TABLE IF NOT EXISTS AssignedCaterers (
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
         ON DELETE CASCADE,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
-        ON DELETE CASCADE       -- when event or employee is deleted, remove assignments
+        ON DELETE CASCADE,       -- when event or employee is deleted, remove assignments
+    CONSTRAINT UQ_ASSIGNMENTS UNIQUE (event_id, employee_id)
+    -- An employee cannot be assigned to the same event more than once
 );
 
 -------------------------------------------------------------------------------------------
@@ -128,7 +132,7 @@ INSERT INTO Employees (
 VALUES (
     "Jeb",
     "Jab",
-    '1998-01-15',
+    '1994-11-16',
     TRUE,
     FALSE,
     TRUE
@@ -361,7 +365,7 @@ INSERT INTO Events (
     event_start,
     event_end,
     event_address,
-    event_type,
+    event_name,
     client_id,
     menu_id
 )
@@ -396,37 +400,37 @@ INSERT INTO AssignedCaterers (
 )
 VALUES (
     (SELECT employee_id FROM Employees WHERE first_name = "Jeb"),
-    (SELECT event_id FROM Events WHERE event_type = "Scout Court of Honor")
+    (SELECT event_id FROM Events WHERE event_name = "Scout Court of Honor")
 ),
 (
     (SELECT employee_id FROM Employees WHERE first_name = "Rex"),
-    (SELECT event_id FROM Events WHERE event_type = "Scout Court of Honor")
+    (SELECT event_id FROM Events WHERE event_name = "Scout Court of Honor")
 ),
 (
     (SELECT employee_id FROM Employees WHERE first_name = "Steel"),
-    (SELECT event_id FROM Events WHERE event_type = "Scout Court of Honor")
+    (SELECT event_id FROM Events WHERE event_name = "Scout Court of Honor")
 ),
 (
     (SELECT employee_id FROM Employees WHERE first_name = "Jerry"),
-    (SELECT event_id FROM Events WHERE event_type = "Hotel Fine Dining")
+    (SELECT event_id FROM Events WHERE event_name = "Hotel Fine Dining")
 ),
 (
     (SELECT employee_id FROM Employees WHERE first_name = "Rex"),
-    (SELECT event_id FROM Events WHERE event_type = "Hotel Fine Dining")
+    (SELECT event_id FROM Events WHERE event_name = "Hotel Fine Dining")
 ),
 (
     (SELECT employee_id FROM Employees WHERE first_name = "Jeb"),
-    (SELECT event_id FROM Events WHERE event_type = "Hotel Fine Dining")
+    (SELECT event_id FROM Events WHERE event_name = "Hotel Fine Dining")
 ),
 (
     (SELECT employee_id FROM Employees WHERE first_name = "Jerry"),
-    (SELECT event_id FROM Events WHERE event_type = "Fairground Catering")
+    (SELECT event_id FROM Events WHERE event_name = "Fairground Catering")
 ),
 (
     (SELECT employee_id FROM Employees WHERE first_name = "Steel"),
-    (SELECT event_id FROM Events WHERE event_type = "Fairground Catering")
+    (SELECT event_id FROM Events WHERE event_name = "Fairground Catering")
 ),
 (
     (SELECT employee_id FROM Employees WHERE first_name = "Jeb"),
-    (SELECT event_id FROM Events WHERE event_type = "Fairground Catering")
+    (SELECT event_id FROM Events WHERE event_name = "Fairground Catering")
 );

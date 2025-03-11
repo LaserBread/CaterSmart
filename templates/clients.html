@@ -11,6 +11,16 @@
   <body>
     <div class= content>
     <h1>Clients</h1>
+    <!-- Flash Message Section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     
     <div class="entrylist" id="mainlist">
         <div class="list-element client-list-element">
@@ -24,6 +34,10 @@
         </div>
     </div>
 
+
+    
+
+    <!--The "name" fields in the input tags tie the input form to Flask-->
     <h3>Add New Client</h3>
     <form id="client-form" style="border: 2px solid black;">
         <label class="g-name">Client Name: <input type="text" id="name" required></label>
