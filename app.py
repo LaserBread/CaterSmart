@@ -282,6 +282,6 @@ def delete_assignment(id):
     return redirect(url_for('assigned_caterers'))
 
 if __name__ == '__main__':
-    app.run(port=10456, debug=True)
+    app.run(port=10446, debug=True)
 
 
