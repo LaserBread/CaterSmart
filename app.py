@@ -19,11 +19,11 @@ app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
 mysql = MySQL(app)
 
+'''Homepage route'''
 @app.route('/')
 def index():
     return render_template('index.html')  
 
-# currently for STEP 4: just rendering other pages, not connected to db/functional
 '''SELECT/INSERT CLIENTS route'''
 @app.route('/clients', methods=['GET', 'POST'])
 def clients():
@@ -42,13 +42,17 @@ def clients():
             """, (client_name, phone_number, email))
             mysql.connection.commit()
             flash('Client added successfully!', 'success')
+
         except MySQLdb.IntegrityError as e:
-            # # this is the error raised when the UNIQUE constraint is violated
-            # if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry
-            #     flash('This employee is already assigned to this event.', 'danger')
-            # else:
-            #     flash('An unexpected error occurred.', 'danger')
-            pass
+            error_message = str(e.args[1])  # Convert error message to string
+            if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Clients, email and phone_number must be UNIQUE
+                if 'email' in error_message:
+                    flash('Error adding client: this client email is already in the database.', 'danger')
+                elif 'phone_number' in error_message:
+                    flash('Error adding client: this phone number is already in the database.', 'danger')
+            else:
+                flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
         finally:
             cur.close()
         
@@ -86,13 +90,10 @@ def employees():
             """, (first_name, last_name, birthdate, has_drivers_license, has_alcohol_certification, has_food_certification))
             mysql.connection.commit()
             flash('Employee added successfully!', 'success')
+
         except MySQLdb.IntegrityError as e:
-            # # this is the error raised when the UNIQUE constraint is violated
-            # if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry
-            #     flash('This employee is already assigned to this event.', 'danger')
-            # else:
-            #     flash('An unexpected error occurred.', 'danger')
-            pass
+            flash(f'An unexpected error occurred: {e.args[1]}.', 'danger')
+
         finally:
             cur.close()
     
@@ -135,12 +136,14 @@ def events():
             """, (event_name, client_id, menu_id, event_start, event_end, event_address))
             mysql.connection.commit()
             flash('Event added successfully!', 'success')
+
         except MySQLdb.IntegrityError as e:
-            if e.args[0] == 1062:  # duplicate event name
+            if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Events, event_name must be UNIQUE
                 flash('An event with this name already exists. Please use a different name.', 'danger')
                 return redirect(url_for('events'))
-            # handle any other unexpected database error
-            flash('An unexpected error occurred. Please try again.', 'danger')
+            else:
+                flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
         finally:
             cur.close()
     
@@ -225,7 +228,7 @@ def assigned_caterers():
         event_id = request.form['event_id']
         cur = mysql.connection.cursor()
 
-        # try/except block: handles when user attempts to assign caterer to event they're already assigned to
+        # try/except block
         try:
             cur.execute("""
                 INSERT INTO AssignedCaterers (employee_id, event_id)
@@ -233,12 +236,14 @@ def assigned_caterers():
             """, (employee_id, event_id))
             mysql.connection.commit()
             flash('Caterer assigned successfully!', 'success')
+
         except MySQLdb.IntegrityError as e:
             # this is the error raised when the UNIQUE constraint is violated
-            if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry
+            if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry - in AssignedCaterers, UNIQUE constraint is defined for combo of employee_id/event_id
                 flash('This employee is already assigned to this event.', 'danger')
             else:
-                flash('An unexpected error occurred.', 'danger')
+                flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
         finally:
             cur.close()
 
@@ -248,12 +253,14 @@ def assigned_caterers():
     cur = mysql.connection.cursor()
     # query:
     cur.execute("""
-                SELECT AssignedCaterers.assigned_caterers_id, AssignedCaterers.employee_id, 
-                    CONCAT(Employees.first_name, ' ', Employees.last_name) AS caterer_name, AssignedCaterers.event_id 
-                FROM AssignedCaterers 
-                INNER JOIN Employees ON AssignedCaterers.employee_id = Employees.employee_id 
-                ORDER BY AssignedCaterers.assigned_caterers_id ASC
-                """)
+            SELECT AssignedCaterers.assigned_caterers_id, AssignedCaterers.employee_id, 
+                CONCAT(Employees.first_name, ' ', Employees.last_name) AS caterer_name, 
+                AssignedCaterers.event_id, Events.event_name AS event_name
+            FROM AssignedCaterers 
+            INNER JOIN Employees ON AssignedCaterers.employee_id = Employees.employee_id 
+            INNER JOIN Events ON AssignedCaterers.event_id = Events.event_id
+            ORDER BY AssignedCaterers.assigned_caterers_id ASC
+    """)
     data = cur.fetchall()
     cur.close()
 
@@ -284,8 +291,14 @@ def update_assignment():
         """, (employee_id, event_id, assignment_id))
         mysql.connection.commit()
         flash('Assignment updated successfully!', 'success')
+
     except MySQLdb.IntegrityError:
-        flash('This employee/event combination already exists.', 'danger')
+        # this is the error raised when the UNIQUE constraint is violated
+        if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry - in AssignedCaterers, UNIQUE constraint is defined for combo of employee_id/event_id
+            flash('This employee is already assigned to this event.', 'danger')
+        else:
+            flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
     finally:
         cur.close()
     return redirect(url_for('assigned_caterers'))
