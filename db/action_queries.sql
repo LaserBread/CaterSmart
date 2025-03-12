@@ -78,12 +78,12 @@ INNER JOIN Ingredients ON ItemIngredients.ingredient_id = Ingredients.ingredient
 ORDER BY ItemIngredients.item_ingredient_id ASC;
 
 -- Select an employee's assignment to an event
-SELECT AssignedCaterers.assigned_caterers_id, 
-       AssignedCaterers.employee_id, 
-       CONCAT(Employees.first_name, ' ', Employees.last_name) AS caterer_name, 
-       AssignedCaterers.event_id
-FROM AssignedCaterers
-INNER JOIN Employees ON AssignedCaterers.employee_id = Employees.employee_id
+SELECT AssignedCaterers.assigned_caterers_id, AssignedCaterers.employee_id, 
+    CONCAT(Employees.first_name, ' ', Employees.last_name) AS caterer_name, 
+    AssignedCaterers.event_id, Events.event_name AS event_name
+FROM AssignedCaterers 
+INNER JOIN Employees ON AssignedCaterers.employee_id = Employees.employee_id 
+INNER JOIN Events ON AssignedCaterers.event_id = Events.event_id
 ORDER BY AssignedCaterers.assigned_caterers_id ASC;
 
 --===========================================================================--

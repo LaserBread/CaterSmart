@@ -5,3 +5,15 @@
 h1 {
     background-color: orange;
 }
+
+.alert.alert-danger {
+    font-family: 'Courier New', Courier, monospace;
+    color: red;
+    font-weight: 700;
+}
+
+.alert.alert-success {
+    font-family: 'Courier New', Courier, monospace;
+    color: green;
+    font-weight: 700;
+}

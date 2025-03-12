@@ -37,8 +37,9 @@
             <tr>
                 <th>Assignment ID</th>
                 <th>Employee ID</th>
-                <th>Caterer Name</th>
+                <th>(Caterer Name)</th>
                 <th>Event ID</th>
+                <th>(Event Name)</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -50,6 +51,7 @@
                 <td>{{ row.employee_id }}</td>
                 <td>{{ row.caterer_name }}</td>
                 <td>{{ row.event_id }}</td>
+                <td>{{ row.event_name  }}</td>
                 <td><button onclick="editAssignment(this)">Edit</button></td>
                 <td><button onclick="deleteAssignment('{{ row.assigned_caterers_id }}')">Delete</button></td>
             </tr>
