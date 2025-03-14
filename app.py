@@ -215,9 +215,24 @@ def items():
 def item_ingredients():
     return render_template('item_ingredients.html')
 
-@app.route('/ingredients')
+@app.route('/ingredients', methods=['GET', 'POST'])
 def ingredients():
-    return render_template('ingredients.html')
+    if request.method == 'POST':
+        
+        pass
+
+    cur = mysql.connection.cursor()
+    # query:
+    cur.execute("""
+            SELECT Ingredients.ingredient_id, Ingredients.ingredient_name,
+                Ingredients.ingredient_qty, Ingredients.unit, 
+                Ingredients.unitPrice FROM Ingredients 
+                ORDER BY Ingredients.ingredient_id ASC;
+    """)
+    data = cur.fetchall()
+    cur.close()
+
+    return render_template("ingredients.html", data = data)
 
 '''SELECT/INSERT ASSIGNED_CATERERS route'''
 @app.route('/assigned_caterers', methods=['GET', 'POST'])
