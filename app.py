@@ -222,14 +222,14 @@ def menus():
         except MySQLdb.IntegrityError as e:
             if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Events, event_name must be UNIQUE
                 flash('An event with this name already exists. Please use a different name.', 'danger')
-                return redirect(url_for('events'))
+                return redirect(url_for('menus'))
             else:
                 flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
 
         finally:
             cur.close()
     
-        return redirect(url_for('events'))
+        return redirect(url_for('menus'))
 
     cur = mysql.connection.cursor()
     # query:
