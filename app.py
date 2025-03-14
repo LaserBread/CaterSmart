@@ -214,8 +214,8 @@ def menus():
         try:
             cur.execute("""
                 INSERT INTO Menus (menu_name) 
-                VALUES (%s);
-            """, (menu_name))
+                VALUES (%s)
+            """, [menu_name])
             mysql.connection.commit()
             flash('Event added successfully!', 'success')
 
