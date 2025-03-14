@@ -213,10 +213,10 @@ def menus():
 
         # try/except block
         try:
-            cur.execute(f"""
+            cur.execute("""
                 INSERT INTO Menus (menu_name) 
-                    VALUES ({menu_name})
-            """)
+                    VALUES (%s)
+            """, (menu_name))
             mysql.connection.commit()
             flash('Event added successfully!', 'success')
 
