@@ -241,9 +241,26 @@ def menus():
     cur.close()
     return render_template("menus.html", data = data)
 
-@app.route('/items')
+@app.route('/items', methods=['GET', 'POST'])
 def items():
-    return render_template('items.html')
+    cur = mysql.connection.cursor()
+    # query:
+    cur.execute("""
+        SELECT Items.item_id, Items.item_name, Items.price, Items.is_alcoholic, Items.menu_id, Menus.menu_name
+            FROM Items JOIN Menus on Items.menu_id = Menus.menu_id
+        ORDER BY Items.item_id ASC;
+    """)
+    data = cur.fetchall()
+    cur.close()
+
+    cur = mysql.connection.cursor()
+    cur.execute(""" SELECT Menus.menu_id, CONCAT(Menus.menu_id, ' - ', Menus.menu_name) AS idname FROM Menus 
+                ORDER BY Menus.menu_id ASC;
+        """)
+    menu = cur.fetchall()
+    cur.close()
+
+    return render_template("items.html", data = data, menu=menu)
 
 @app.route('/item_ingredients')
 def item_ingredients():
@@ -292,7 +309,7 @@ def ingredients():
     data = cur.fetchall()
     cur.close()
 
-    return render_template("ingredients.html", data = data)
+    return render_template("ingredients.html", data=data)
 
 '''SELECT/INSERT ASSIGNED_CATERERS route'''
 @app.route('/assigned_caterers', methods=['GET', 'POST'])
