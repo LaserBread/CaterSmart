@@ -76,9 +76,11 @@ def employees():
         last_name = request.form['last_name']
         birthdate = request.form['birthdate']
         # handle boolean inputs
-        has_drivers_license = True if request.form['has_drivers_license'] == 'True' else False
-        has_alcohol_certification = True if request.form['has_alcohol_certification'] == 'True' else False
-        has_food_certification = True if request.form['has_food_certification'] == 'True' else False
+        # Ethan: These actually don't need a conditional assignment because the
+        # == operator returns True or False, which will get stored as such
+        has_drivers_license = request.form['has_drivers_license'] == 'True'
+        has_alcohol_certification = request.form['has_alcohol_certification'] == 'True'
+        has_food_certification = request.form['has_food_certification'] == 'True'
 
         cur = mysql.connection.cursor()
 
@@ -243,6 +245,28 @@ def menus():
 
 @app.route('/items', methods=['GET', 'POST'])
 def items():
+    if request.method == 'POST':
+        item_name = request.form['item_name']
+        menu_id = request.form['menu_id']
+        price = request.form['price']
+        is_alcoholic = request.form['is_alcoholic'] == 'True'
+        try:
+            cur.execute("""
+                INSERT INTO Items (item_name, menu_id, price, is_alcoholic)
+                VALUES (%s, %s, %s, %s)
+            """, (item_name, menu_id, price, is_alcoholic))
+            mysql.connection.commit()
+            flash('Item created successfully!', 'success')
+
+        except MySQLdb.IntegrityError as e:
+            # this is the error raised when the UNIQUE constraint is violated
+            if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry - in AssignedCaterers, UNIQUE constraint is defined for combo of employee_id/event_id
+                flash('An item with this name already exists.', 'danger')
+            else:
+                flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
+        return redirect(url_for("items"))
+    
     cur = mysql.connection.cursor()
     # query:
     cur.execute("""
