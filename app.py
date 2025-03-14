@@ -263,7 +263,7 @@ def ingredients():
         # try/except block
         try:
             cur.execute("""
-                INSERT INTO Events (ingredient_name, ingredient_qty, unit, unit_price)
+                INSERT INTO Ingredients (ingredient_name, ingredient_qty, unit, unit_price)
                 VALUES (%s, %s, %s, %s)
             """, (ingredient_name, ingredient_qty, unit, unit_price))
             mysql.connection.commit()
