@@ -229,7 +229,7 @@ def menus():
         finally:
             cur.close()
     
-        return redirect(url_for('events'))
+        return redirect(url_for('/'))
 
     cur = mysql.connection.cursor()
     # query:
