@@ -208,7 +208,7 @@ def menus():
     if request.method == 'POST':
         # add new event
         menu_name = request.form['menu_name']
-        
+        print("menu_name")
         cur = mysql.connection.cursor()
 
         # try/except block
