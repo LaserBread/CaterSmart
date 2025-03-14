@@ -214,7 +214,7 @@ def menus():
         # try/except block
         try:
             cur.execute(f"""
-                INSERT INTO Menus (menu_name) VALUES ({menu_name})
+                INSERT INTO Menus (menu_name) VALUES {menu_name}
             """)
             mysql.connection.commit()
             flash('Event added successfully!', 'success')
