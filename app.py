@@ -206,8 +206,30 @@ def update_event():
 @app.route('/menus', methods=['GET', 'POST'])
 def menus():
     if request.method == 'POST':
+        # add new event
+        menu_name = request.form['menu_name']
         
-        pass
+        cur = mysql.connection.cursor()
+
+        # try/except block
+        try:
+            cur.execute(f"""
+                INSERT INTO Menus (menu_name) VALUES ({menu_name});
+            """)
+            mysql.connection.commit()
+            flash('Event added successfully!', 'success')
+
+        except MySQLdb.IntegrityError as e:
+            if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Events, event_name must be UNIQUE
+                flash('An event with this name already exists. Please use a different name.', 'danger')
+                return redirect(url_for('events'))
+            else:
+                flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
+        finally:
+            cur.close()
+    
+        return redirect(url_for('events'))
 
     cur = mysql.connection.cursor()
     # query:
