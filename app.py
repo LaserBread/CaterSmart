@@ -252,8 +252,34 @@ def item_ingredients():
 @app.route('/ingredients', methods=['GET', 'POST'])
 def ingredients():
     if request.method == 'POST':
+        # add new event
+        ingredient_name = request.form['ingredient_name']
+        ingredient_qty = request.form['ingredient_qty']
+        unit = request.form['unit']
+        unit_price = request.form['unit_price']
         
-        pass
+        cur = mysql.connection.cursor()
+
+        # try/except block
+        try:
+            cur.execute("""
+                INSERT INTO Events (ingredient_name, ingredient_qty, unit, unit_price)
+                VALUES (%s, %s, %s, %s)
+            """, (ingredient_name, ingredient_qty, unit, unit_price))
+            mysql.connection.commit()
+            flash('Event added successfully!', 'success')
+
+        except MySQLdb.IntegrityError as e:
+            if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Events, event_name must be UNIQUE
+                flash('An event with this name already exists. Please use a different name.', 'danger')
+                return redirect(url_for('events'))
+            else:
+                flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
+        finally:
+            cur.close()
+    
+        return redirect(url_for('events'))
 
     cur = mysql.connection.cursor()
     # query:
