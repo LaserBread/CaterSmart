@@ -226,7 +226,7 @@ def ingredients():
     cur.execute("""
             SELECT Ingredients.ingredient_id, Ingredients.ingredient_name,
                 Ingredients.ingredient_qty, Ingredients.unit, 
-                Ingredients.unit_rice FROM Ingredients 
+                Ingredients.unit_price FROM Ingredients 
                 ORDER BY Ingredients.ingredient_id ASC;
     """)
     data = cur.fetchall()
