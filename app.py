@@ -203,9 +203,21 @@ def update_event():
         cur.close()
     return redirect(url_for('events'))
 
-@app.route('/menus')
+@app.route('/menus', methods=['GET', 'POST'])
 def menus():
-    return render_template('menus.html')
+    if request.method == 'POST':
+        
+        pass
+
+    cur = mysql.connection.cursor()
+    # query:
+    cur.execute("""
+            SELECT Menus.menu_id, Menus.menu_name
+                ORDER BY Menus.menu_id ASC;
+    """)
+    data = cur.fetchall()
+    cur.close()
+    return render_template("menus.html", data = data)
 
 @app.route('/items')
 def items():

@@ -29,14 +29,12 @@
             </tr>
         </thead>
         <tbody>
+            {% for row in data %}
             <tr>
-                <td>1</td>
-                <td>Fall Harvest</td>
+                <td>{{ row.menu_id }}</td>
+                <td>{{ row.menu_name }}</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>Summer Spread</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
