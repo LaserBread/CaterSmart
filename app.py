@@ -212,7 +212,7 @@ def menus():
     cur = mysql.connection.cursor()
     # query:
     cur.execute("""
-            SELECT Menus.menu_id, Menus.menu_name
+            SELECT Menus.menu_id, Menus.menu_name FROM Menus
                 ORDER BY Menus.menu_id ASC;
     """)
     data = cur.fetchall()
