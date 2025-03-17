@@ -76,9 +76,11 @@ def employees():
         last_name = request.form['last_name']
         birthdate = request.form['birthdate']
         # handle boolean inputs
-        has_drivers_license = True if request.form['has_drivers_license'] == 'True' else False
-        has_alcohol_certification = True if request.form['has_alcohol_certification'] == 'True' else False
-        has_food_certification = True if request.form['has_food_certification'] == 'True' else False
+        # Ethan: These actually don't need a conditional assignment because the
+        # == operator returns True or False, which will get stored as such
+        has_drivers_license = request.form['has_drivers_license'] == 'True'
+        has_alcohol_certification = request.form['has_alcohol_certification'] == 'True'
+        has_food_certification = request.form['has_food_certification'] == 'True'
 
         cur = mysql.connection.cursor()
 
@@ -203,21 +205,135 @@ def update_event():
         cur.close()
     return redirect(url_for('events'))
 
-@app.route('/menus')
+@app.route('/menus', methods=['GET', 'POST'])
 def menus():
-    return render_template('menus.html')
+    if request.method == 'POST':
+        # add new event
+        menu_name = request.form['menu_name']
+        cur = mysql.connection.cursor()
 
-@app.route('/items')
+        # try/except block
+        try:
+            cur.execute("""
+                INSERT INTO Menus (menu_name) 
+                VALUES (%s)
+            """, [menu_name])
+            mysql.connection.commit()
+            flash('Event added successfully!', 'success')
+
+        except MySQLdb.IntegrityError as e:
+            if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Events, event_name must be UNIQUE
+                flash('An event with this name already exists. Please use a different name.', 'danger')
+                return redirect(url_for('menus'))
+            else:
+                flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
+        finally:
+            cur.close()
+    
+        return redirect(url_for('menus'))
+
+    cur = mysql.connection.cursor()
+    # query:
+    cur.execute("""
+            SELECT Menus.menu_id, Menus.menu_name FROM Menus
+                ORDER BY Menus.menu_id ASC;
+    """)
+    data = cur.fetchall()
+    cur.close()
+    return render_template("menus.html", data = data)
+
+@app.route('/items', methods=['GET', 'POST'])
 def items():
-    return render_template('items.html')
+    if request.method == 'POST':
+        item_name = request.form['item_name']
+        menu_id = request.form['menu_id']
+        price = request.form['price']
+        is_alcoholic = request.form['is_alcoholic'] == 'True'
+        try:
+            cur.execute("""
+                INSERT INTO Items (item_name, menu_id, price, is_alcoholic)
+                VALUES (%s, %s, %s, %s)
+            """, (item_name, menu_id, price, is_alcoholic))
+            mysql.connection.commit()
+            flash('Item created successfully!', 'success')
+
+        except MySQLdb.IntegrityError as e:
+            # this is the error raised when the UNIQUE constraint is violated
+            if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry - in AssignedCaterers, UNIQUE constraint is defined for combo of employee_id/event_id
+                flash('An item with this name already exists.', 'danger')
+            else:
+                flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
+        return redirect(url_for("items"))
+    
+    cur = mysql.connection.cursor()
+    # query:
+    cur.execute("""
+        SELECT Items.item_id, Items.item_name, Items.price, Items.is_alcoholic, Items.menu_id, Menus.menu_name
+            FROM Items JOIN Menus on Items.menu_id = Menus.menu_id
+        ORDER BY Items.item_id ASC;
+    """)
+    data = cur.fetchall()
+    cur.close()
+
+    cur = mysql.connection.cursor()
+    cur.execute(""" SELECT Menus.menu_id, CONCAT(Menus.menu_id, ' - ', Menus.menu_name) AS idname FROM Menus 
+                ORDER BY Menus.menu_id ASC;
+        """)
+    menu = cur.fetchall()
+    cur.close()
+
+    return render_template("items.html", data = data, menu=menu)
 
 @app.route('/item_ingredients')
 def item_ingredients():
     return render_template('item_ingredients.html')
 
-@app.route('/ingredients')
+@app.route('/ingredients', methods=['GET', 'POST'])
 def ingredients():
-    return render_template('ingredients.html')
+    if request.method == 'POST':
+        # add new event
+        ingredient_name = request.form['ingredient_name']
+        ingredient_qty = request.form['ingredient_qty']
+        unit = request.form['unit']
+        unit_price = request.form['unit_price']
+        
+        cur = mysql.connection.cursor()
+
+        # try/except block
+        try:
+            cur.execute("""
+                INSERT INTO Ingredients (ingredient_name, ingredient_qty, unit, unit_price)
+                VALUES (%s, %s, %s, %s)
+            """, (ingredient_name, ingredient_qty, unit, unit_price))
+            mysql.connection.commit()
+            flash('Event added successfully!', 'success')
+
+        except MySQLdb.IntegrityError as e:
+            if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Events, event_name must be UNIQUE
+                flash('An event with this name already exists. Please use a different name.', 'danger')
+                return redirect(url_for('ingredients'))
+            else:
+                flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
+        finally:
+            cur.close()
+    
+        return redirect(url_for('ingredients'))
+
+    cur = mysql.connection.cursor()
+    # query:
+    cur.execute("""
+            SELECT Ingredients.ingredient_id, Ingredients.ingredient_name,
+                Ingredients.ingredient_qty, Ingredients.unit, 
+                Ingredients.unit_price FROM Ingredients 
+                ORDER BY Ingredients.ingredient_id ASC;
+    """)
+    data = cur.fetchall()
+    cur.close()
+
+    return render_template("ingredients.html", data=data)
 
 '''SELECT/INSERT ASSIGNED_CATERERS route'''
 @app.route('/assigned_caterers', methods=['GET', 'POST'])
@@ -313,4 +429,4 @@ def delete_assignment(id):
     return redirect(url_for('assigned_caterers'))
 
 if __name__ == '__main__':
-    app.run(port=10456, debug=True)
+    app.run(port=6000, debug=True)

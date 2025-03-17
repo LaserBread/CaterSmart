@@ -21,6 +21,17 @@
         <a href="/ingredients">Ingredients</a> ]
     </nav>
 
+    <!-- Flash Message Section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <table border="1">
         <thead>
             <tr>
@@ -29,23 +40,19 @@
             </tr>
         </thead>
         <tbody>
+            {% for row in data %}
             <tr>
-                <td>1</td>
-                <td>Fall Harvest</td>
+                <td>{{ row.menu_id }}</td>
+                <td>{{ row.menu_name }}</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>Summer Spread</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
     <h3>Add New Menu</h3>
-    <form id="menu-form" style="border: 2px solid black;">
-        <label>Menu Name: <input type="text" id="menu_name" required></label><br>
-        <button type="button" onclick="addMenu()">Add Menu</button><br>
+    <form id="menu-form" style="border: 2px solid black;" method="POST">
+        <label>Menu Name: <input type="text" name="menu_name" required></label><br>
+        <button type="submit">Add Menu</button><br>
     </form>
-
-    <script src="index.js"></script>
   </body>
 </html>
