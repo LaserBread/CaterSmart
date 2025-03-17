@@ -293,7 +293,7 @@ def item_ingredients():
 @app.route('/ingredients', methods=['GET', 'POST'])
 def ingredients():
     if request.method == 'POST':
-        # add new event
+        # add new ingredient
         ingredient_name = request.form['ingredient_name']
         ingredient_qty = request.form['ingredient_qty']
         unit = request.form['unit']
@@ -312,7 +312,7 @@ def ingredients():
 
         except MySQLdb.IntegrityError as e:
             if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Events, event_name must be UNIQUE
-                flash('An event with this name already exists. Please use a different name.', 'danger')
+                flash('An ingredient with this name already exists. Please use a different name.', 'danger')
                 return redirect(url_for('ingredients'))
             else:
                 flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
@@ -429,4 +429,4 @@ def delete_assignment(id):
     return redirect(url_for('assigned_caterers'))
 
 if __name__ == '__main__':
-    app.run(port=6000, debug=True)
+    app.run(port=10456, debug=True)
