@@ -64,7 +64,6 @@ def clients():
     cur.execute("SELECT client_id, client_name, phone_number, email FROM Clients")
     data = cur.fetchall()
     cur.close()
-
     return render_template('clients.html', data=data)
 
 '''SELECT/INSERT EMPLOYEES route'''
@@ -113,7 +112,6 @@ def employees():
         row['has_drivers_license'] = 'True' if row['has_drivers_license'] else 'False'
         row['has_alcohol_certification'] = 'True' if row['has_alcohol_certification'] else 'False'
         row['has_food_certification'] = 'True' if row['has_food_certification'] else 'False'
-    
     return render_template('employees.html', data=data)
 
 '''SELECT/INSERT EVENTS route'''
@@ -168,7 +166,6 @@ def events():
     clients = cur.fetchall()
     cur.execute("SELECT menu_id, menu_name FROM Menus")
     menus = cur.fetchall()
-
     return render_template('events.html', data=data, clients=clients, menus=menus)
 
 '''UPDATE EVENT route'''
@@ -268,14 +265,13 @@ def items():
                 flash('An item with this name already exists.', 'danger')
             else:
                 flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
-
         return redirect(url_for("items"))
     
     cur = mysql.connection.cursor()
     # query:
     cur.execute("""
         SELECT Items.item_id, Items.item_name, Items.price, Items.is_alcoholic, Items.menu_id, Menus.menu_name
-            FROM Items JOIN Menus on Items.menu_id = Menus.menu_id
+            FROM Items LEFT JOIN Menus on Items.menu_id = Menus.menu_id
         ORDER BY Items.item_id ASC;
     """)
     data = cur.fetchall()
@@ -291,7 +287,6 @@ def items():
     # convert 0/1 to True/False
     for row in data:
         row['is_alcoholic'] = 'True' if row['is_alcoholic'] else 'False'
-
     return render_template("items.html", data = data, menu=menu)
 
 '''SELECT/INSERT ITEMINGREDIENTS route'''
@@ -312,7 +307,7 @@ def item_ingredients():
                 VALUES (%s, %s, %s)
             """, (item_id, ingredient_id, required_qty))
             mysql.connection.commit()
-            flash('ItemIngredient inputted successfully!', 'success')
+            flash('ItemIngredient added successfully!', 'success')
 
         except MySQLdb.IntegrityError as e:
             # this is the error raised when the UNIQUE constraint is violated
@@ -323,7 +318,6 @@ def item_ingredients():
 
         finally:
             cur.close()
-
         return redirect(url_for('item_ingredients'))
 
     # display the ItemIngredients table
@@ -347,7 +341,6 @@ def item_ingredients():
     cur.execute("SELECT ingredient_id, ingredient_name FROM Ingredients")
     ingredients = cur.fetchall()
     cur.close()
-
     return render_template('item_ingredients.html', data=data, items=items, ingredients=ingredients)
 
 '''SELECT/INSERT INGREDIENTS route'''
@@ -392,7 +385,6 @@ def ingredients():
     """)
     data = cur.fetchall()
     cur.close()
-
     return render_template("ingredients.html", data=data)
 
 '''SELECT/INSERT ASSIGNED_CATERERS route'''
@@ -447,7 +439,6 @@ def assigned_caterers():
     cur.execute("SELECT event_id, event_name FROM Events")
     events = cur.fetchall()
     cur.close()
-
     return render_template('assigned_caterers.html', data=data, employees=employees, events=events)
 
 '''UPDATE ASSIGNED_CATERERS route'''
