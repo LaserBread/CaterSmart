@@ -324,8 +324,13 @@ def item_ingredients():
     cur = mysql.connection.cursor()
     # query:
     cur.execute("""
-            SELECT ItemIngredients.item_ingredient_id, ItemIngredients.item_id, ItemIngredients.ingredient_id,
-                Items.item_name, Ingredients.ingredient_name, Ingredients.unit, ItemIngredients.required_qty
+            SELECT ItemIngredients.item_ingredient_id, 
+                ItemIngredients.item_id, 
+                ItemIngredients.ingredient_id,
+                Items.item_name, 
+                Ingredients.ingredient_name, 
+                Ingredients.unit, 
+                ItemIngredients.required_qty
             FROM ItemIngredients 
             INNER JOIN Items ON ItemIngredients.item_id = Items.item_id 
             INNER JOIN Ingredients ON ItemIngredients.ingredient_id = Ingredients.ingredient_id
