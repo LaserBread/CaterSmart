@@ -21,49 +21,61 @@
         <a href="/ingredients">Ingredients</a> ]
     </nav>
 
+    <!-- Flash Message Section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <table border="1">
         <thead>
             <tr>
                 <th>Item Ingredient ID</th>
                 <th>Item ID</th>
+                <th>(Item Name)</th>
                 <th>Ingredient ID</th>
+                <th>(Ingredient Name)</th>
+                <th>(Ingredient Unit)</th>
                 <th>Ingredient Quantity Required</th>
             </tr>
         </thead>
         <tbody>
+            {% for row in data %}
             <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>0.5</td>
+                <td>{{ row.item_ingredient_id }}</td>
+                <td>{{ row.item_id }}</td>
+                <td>{{ row.item_name }}</td>
+                <td>{{ row.ingredient_id }}</td>
+                <td>{{ row.ingredient_name }}</td>
+                <td>{{ row.unit }}</td>
+                <td>{{ row.required_qty }}</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>2</td>
-                <td>2</td>
-                <td>0.2</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
     <h3>Add New Item Ingredient</h3>
-    <form id="item-ingredient-form" style="border: 2px solid black;">
-        <!-- <label>Item ID: <input type="number" required></label><br> -->
+    <form id="item-ingredient-form" method="POST" style="border: 2px solid black;">
         <label>Item ID: 
             <select name="item_id" id="item_id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                {% for item in items %}
+                <option value="{{ item.item_id }}">{{ item.item_id }} - {{ item.item_name }}</option>
+                {% endfor %}
             </select>
         </label><br>
-        <!-- <label>Ingredient ID: <input type="number" required></label><br> -->
         <label>Ingredient ID: 
             <select name="ingredient_id" id="ingredient_id">
-                <option value="1">1</option>
-                <option value="2">2</option>
+                {% for ingredient in ingredients %}
+                <option value="{{ ingredient.ingredient_id }}">{{ ingredient.ingredient_id }} - {{ ingredient.ingredient_name }}</option>
+                {% endfor %}
             </select>
         </label><br>
-        <label>Ingredient Quantity Required: <input type="number" step="0.01" required></label><br>
+        <label>Ingredient Quantity Required: <input type="number" step="0.01" name="required_qty" required></label><br>
         <button type="submit">Add Item Ingredient</button><br>
     </form>
   </body>

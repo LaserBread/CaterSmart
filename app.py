@@ -142,7 +142,6 @@ def events():
         except MySQLdb.IntegrityError as e:
             if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Events, event_name must be UNIQUE
                 flash('An event with this name already exists. Please use a different name.', 'danger')
-                return redirect(url_for('events'))
             else:
                 flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
 
@@ -182,7 +181,6 @@ def update_event():
     event_end = request.form['event_end']
     event_address = request.form['event_address']
 
-
     cur = mysql.connection.cursor()
 
     # update the event
@@ -205,10 +203,11 @@ def update_event():
         cur.close()
     return redirect(url_for('events'))
 
+'''SELECT/INSERT MENUS route'''
 @app.route('/menus', methods=['GET', 'POST'])
 def menus():
     if request.method == 'POST':
-        # add new event
+        # add new menu
         menu_name = request.form['menu_name']
         cur = mysql.connection.cursor()
 
@@ -219,15 +218,13 @@ def menus():
                 VALUES (%s)
             """, [menu_name])
             mysql.connection.commit()
-            flash('Event added successfully!', 'success')
+            flash('Menu added successfully!', 'success')
 
         except MySQLdb.IntegrityError as e:
-            if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Events, event_name must be UNIQUE
-                flash('An event with this name already exists. Please use a different name.', 'danger')
-                return redirect(url_for('menus'))
+            if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Menus, menu_name must be UNIQUE
+                flash('A menu with this name already exists. Please use a different name.', 'danger')
             else:
                 flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
-
         finally:
             cur.close()
     
@@ -243,6 +240,7 @@ def menus():
     cur.close()
     return render_template("menus.html", data = data)
 
+'''SELECT/INSERT ITEMS route'''
 @app.route('/items', methods=['GET', 'POST'])
 def items():
     if request.method == 'POST':
@@ -250,6 +248,12 @@ def items():
         menu_id = request.form['menu_id']
         price = request.form['price']
         is_alcoholic = request.form['is_alcoholic'] == 'True'
+
+        if menu_id == "NULL":  # Convert "NULL" string to Python None
+            menu_id = None
+
+        cur = mysql.connection.cursor()
+
         try:
             cur.execute("""
                 INSERT INTO Items (item_name, menu_id, price, is_alcoholic)
@@ -260,7 +264,7 @@ def items():
 
         except MySQLdb.IntegrityError as e:
             # this is the error raised when the UNIQUE constraint is violated
-            if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry - in AssignedCaterers, UNIQUE constraint is defined for combo of employee_id/event_id
+            if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry
                 flash('An item with this name already exists.', 'danger')
             else:
                 flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
@@ -284,12 +288,69 @@ def items():
     menu = cur.fetchall()
     cur.close()
 
+    # convert 0/1 to True/False
+    for row in data:
+        row['is_alcoholic'] = 'True' if row['is_alcoholic'] else 'False'
+
     return render_template("items.html", data = data, menu=menu)
 
-@app.route('/item_ingredients')
+'''SELECT/INSERT ITEMINGREDIENTS route'''
+@app.route('/item_ingredients', methods=['GET', 'POST'])
 def item_ingredients():
-    return render_template('item_ingredients.html')
+    if request.method == 'POST':
+        # add new ItemIngredient
+        item_id = request.form['item_id']
+        ingredient_id = request.form['ingredient_id']
+        required_qty = request.form['required_qty']
 
+        cur = mysql.connection.cursor()
+
+        # try/except block
+        try:
+            cur.execute("""
+                INSERT INTO ItemIngredients (item_id, ingredient_id, required_qty)
+                VALUES (%s, %s, %s)
+            """, (item_id, ingredient_id, required_qty))
+            mysql.connection.commit()
+            flash('ItemIngredient inputted successfully!', 'success')
+
+        except MySQLdb.IntegrityError as e:
+            # this is the error raised when the UNIQUE constraint is violated
+            if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry - in ItemIngredients, UNIQUE constraint is defined for combo of item_id/ingredient_id
+                flash('This item already contains this ingredient.', 'danger')
+            else:
+                flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
+        finally:
+            cur.close()
+
+        return redirect(url_for('item_ingredients'))
+
+    # display the ItemIngredients table
+    cur = mysql.connection.cursor()
+    # query:
+    cur.execute("""
+            SELECT ItemIngredients.item_ingredient_id, ItemIngredients.item_id, ItemIngredients.ingredient_id,
+                Items.item_name, Ingredients.ingredient_name, Ingredients.unit, ItemIngredients.required_qty
+            FROM ItemIngredients 
+            INNER JOIN Items ON ItemIngredients.item_id = Items.item_id 
+            INNER JOIN Ingredients ON ItemIngredients.ingredient_id = Ingredients.ingredient_id
+            ORDER BY ItemIngredients.item_ingredient_id ASC
+    """)
+    data = cur.fetchall()
+    cur.close()
+
+    # get item and ingredient data for the dropdown lists
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT item_id, item_name FROM Items")
+    items = cur.fetchall()
+    cur.execute("SELECT ingredient_id, ingredient_name FROM Ingredients")
+    ingredients = cur.fetchall()
+    cur.close()
+
+    return render_template('item_ingredients.html', data=data, items=items, ingredients=ingredients)
+
+'''SELECT/INSERT INGREDIENTS route'''
 @app.route('/ingredients', methods=['GET', 'POST'])
 def ingredients():
     if request.method == 'POST':
@@ -308,12 +369,11 @@ def ingredients():
                 VALUES (%s, %s, %s, %s)
             """, (ingredient_name, ingredient_qty, unit, unit_price))
             mysql.connection.commit()
-            flash('Event added successfully!', 'success')
+            flash('Ingredient added successfully!', 'success')
 
         except MySQLdb.IntegrityError as e:
-            if e.args[0] == 1062:  # MySQL error code for duplicate entry - in Events, event_name must be UNIQUE
+            if e.args[0] == 1062:  # MySQL error code for duplicate entry
                 flash('An ingredient with this name already exists. Please use a different name.', 'danger')
-                return redirect(url_for('ingredients'))
             else:
                 flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
 
@@ -408,7 +468,7 @@ def update_assignment():
         mysql.connection.commit()
         flash('Assignment updated successfully!', 'success')
 
-    except MySQLdb.IntegrityError:
+    except MySQLdb.IntegrityError as e:
         # this is the error raised when the UNIQUE constraint is violated
         if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry - in AssignedCaterers, UNIQUE constraint is defined for combo of employee_id/event_id
             flash('This employee is already assigned to this event.', 'danger')
