@@ -36,15 +36,11 @@ VALUES (:employee_id, :event_id);
 --======== READ =============================================================--
 -- Select a client
 SELECT client_id, client_name, phone_number, email
-   FROM Clients
+FROM Clients
 
 -- Select an employee
 SELECT employee_id, first_name, last_name, birthdate, has_drivers_license, has_alcohol_certification, has_food_certification
-   FROM Employees
-   
--- Select an event
-SELECT event_id, event_name, client_id, menu_id, event_start, event_end, event_address
-   FROM Events
+FROM Employees
 
 -- Select an event (with client name and menu name added)
 SELECT Events.event_id, Events.event_name, Events.client_id, Clients.client_name, Events.menu_id, Menus.menu_name, Events.event_start, Events.event_end, Events.event_address
@@ -54,28 +50,35 @@ INNER JOIN Menus ON Events.menu_id = Menus.menu_id
 ORDER BY Events.event_id ASC;
 
 -- Select a menu
-SELECT menu_id, menu_name
-   FROM Menus
+SELECT Menus.menu_id, Menus.menu_name
+FROM Menus
+ORDER BY Menus.menu_id ASC;
 
--- Select a menu item
-SELECT item_id, menu_id, item_name, price, is_alcoholic
-   FROM Items
+-- Select an item
+SELECT Items.item_id, Items.item_name, Items.price, Items.is_alcoholic, Items.menu_id, Menus.menu_name
+FROM Items 
+LEFT JOIN Menus on Items.menu_id = Menus.menu_id
+ORDER BY Items.item_id ASC;
 
 -- Select an ingredient
-SELECT ingredient_id, ingredient_name, ingredient_qty, unit, unit_price
-   FROM Ingredients
+SELECT Ingredients.ingredient_id, Ingredients.ingredient_name,
+    Ingredients.ingredient_qty, Ingredients.unit, 
+    Ingredients.unit_price 
+FROM Ingredients 
+ORDER BY Ingredients.ingredient_id ASC;
 
 -- Select an ingredient's link to a menu
 SELECT ItemIngredients.item_ingredient_id, 
-       ItemIngredients.item_id, 
-       Items.item_name, 
-       ItemIngredients.ingredient_id, 
-       Ingredients.ingredient_name, 
-       ItemIngredients.required_qty
-FROM ItemIngredients
-INNER JOIN Items ON ItemIngredients.item_id = Items.item_id
+    ItemIngredients.item_id, 
+    ItemIngredients.ingredient_id,
+    Items.item_name, 
+    Ingredients.ingredient_name, 
+    Ingredients.unit, 
+    ItemIngredients.required_qty
+FROM ItemIngredients 
+INNER JOIN Items ON ItemIngredients.item_id = Items.item_id 
 INNER JOIN Ingredients ON ItemIngredients.ingredient_id = Ingredients.ingredient_id
-ORDER BY ItemIngredients.item_ingredient_id ASC;
+ORDER BY ItemIngredients.item_ingredient_id ASC
 
 -- Select an employee's assignment to an event
 SELECT AssignedCaterers.assigned_caterers_id, AssignedCaterers.employee_id, 
@@ -100,8 +103,7 @@ DELETE FROM AssignedCaterers WHERE assigned_caterers_id = :selected_id;
 
 -- Update an event
 UPDATE Events
-    SET event_name = :event_name_in 
-        client_id = :client_in,
+    SET event_name = :event_name_in,
         menu_id = :menu_in, 
         event_start = :start_in,
         event_end = :end_in,
@@ -112,5 +114,5 @@ UPDATE Events
 UPDATE AssignedCaterers
     SET employee_id = :employee_in,
     event_id = event_in
-    WHERE item_ingredient_id = :selected_id;
+    WHERE assigned_caterers_id = :selected_id;
 --===========================================================================--
