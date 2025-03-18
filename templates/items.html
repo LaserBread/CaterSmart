@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Items</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-
-<body>
+  </head>
+  <body>
     <h1>Items</h1>
     <nav>
         [ <a href="/">HOME</a> |
@@ -25,13 +23,13 @@
 
     <!-- Flash Message Section -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
     {% endwith %}
 
 
@@ -44,6 +42,7 @@
                 <th>Menu Name</th>
                 <th>Price</th>
                 <th>Alcoholic</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -54,13 +53,14 @@
                 <td>{{ row.menu_id }}</td>
                 <td>
                     {% if row.menu_name %}
-                    {{ row.menu_name }}
+                        {{ row.menu_name }}
                     {% else %}
-                    None
+                        None
                     {% endif %}
                 </td>
                 <td>{{ row.price }}</td>
                 <td>{{ row.is_alcoholic }}</td>
+                <td><button onclick="editItem(this)">Edit</button></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -68,8 +68,8 @@
 
     <h3>Add New Item</h3>
     <form id="item-form" style="border: 2px solid black;" method="POST">
-        <!-- <label>Menu ID: <input type="number" required></label><br> -->
-        <label>Menu:
+
+        <label>Menu: 
             <select name="menu_id" id="menu_id">
                 <option value="NULL">None</option>
                 {% for entry in menu %}
@@ -78,7 +78,7 @@
             </select>
         </label><br>
         <label>Item Name: <input type="text" name="item_name" required></label><br>
-        <label>Price: <input name="price" type="number" step="0.01" required></label><br>
+        <label>Price: <input name= "price" type="number" step="0.01" required></label><br>
         <label>Alcoholic:
             <select required name="is_alcoholic">
                 <option value="False">False</option>
@@ -91,12 +91,12 @@
     <h3>Edit Item</h3>
     <form id="edit-item-form" action="/update_item" method="POST" style="border: 2px solid black; display: none;">
         <input type="hidden" id="edit-item-id" name="item_id">
-
-        <label>Item Name:
+        
+        <label>Item Name: 
             <input type="text" id="edit-item-name" name="item_name" required>
         </label><br>
-
-        <label>Menu:
+        
+        <label>Menu: 
             <select id="edit-item-menu" name="menu_id">
                 <option value="NULL">None</option>
                 {% for entry in menu %}
@@ -104,18 +104,18 @@
                 {% endfor %}
             </select>
         </label><br>
-
-        <label>Price:
+        
+        <label>Price: 
             <input type="number" id="edit-item-price" name="price" step="0.01" required>
         </label><br>
-
+        
         <label>Alcoholic:
             <select id="edit-item-alcoholic" name="is_alcoholic" required>
                 <option value="False">False</option>
                 <option value="True">True</option>
             </select>
         </label><br>
-
+        
         <button type="submit">Save Changes</button>
         <button type="button" onclick="cancelEdit()">Cancel</button>
     </form>
@@ -124,38 +124,36 @@
         function editItem(button) {
             let row = button.parentNode.parentNode;
             let cells = row.getElementsByTagName("td");
-
-            // Populate hidden input for Item ID
+            
+            // populate hidden input for Item ID
             document.getElementById("edit-item-id").value = cells[0].innerText;
-
-            // Populate name and price
+            
+            // populate name and price
             document.getElementById("edit-item-name").value = cells[1].innerText;
             document.getElementById("edit-item-price").value = cells[4].innerText;
+            
 
-            // Handle the Menu Dropdown Pre-Selection
             let menuDropdown = document.getElementById("edit-item-menu");
-            let currentMenuId = cells[2].innerText;  // Menu ID in the row
-
-            // If the menu_id is empty, select "None"
+            let currentMenuId = cells[2].innerText; 
+            
+            // if the menu_id is empty, select "None"
             if (currentMenuId === "") {
                 menuDropdown.value = "NULL";
             } else {
                 menuDropdown.value = currentMenuId;
             }
-
-            // Handle the is_alcoholic dropdown
+            
+            // handle the is_alcoholic dropdown
             let alcoholicDropdown = document.getElementById("edit-item-alcoholic");
             alcoholicDropdown.value = cells[5].innerText;  // "True" or "False"
-
-            // Show the Edit Form
+            
+            // show form
             document.getElementById("edit-item-form").style.display = "block";
         }
-
+        
         function cancelEdit() {
             document.getElementById("edit-item-form").style.display = "none";
         }
     </script>
-
-</body>
-
+  </body>
 </html>
