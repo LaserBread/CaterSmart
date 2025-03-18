@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Items</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  </head>
-  <body>
+</head>
+
+<body>
     <h1>Items</h1>
     <nav>
         [ <a href="/">HOME</a> |
@@ -23,13 +25,13 @@
 
     <!-- Flash Message Section -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
     {% endwith %}
 
 
@@ -52,9 +54,9 @@
                 <td>{{ row.menu_id }}</td>
                 <td>
                     {% if row.menu_name %}
-                        {{ row.menu_name }}
+                    {{ row.menu_name }}
                     {% else %}
-                        None
+                    None
                     {% endif %}
                 </td>
                 <td>{{ row.price }}</td>
@@ -67,7 +69,7 @@
     <h3>Add New Item</h3>
     <form id="item-form" style="border: 2px solid black;" method="POST">
         <!-- <label>Menu ID: <input type="number" required></label><br> -->
-        <label>Menu: 
+        <label>Menu:
             <select name="menu_id" id="menu_id">
                 <option value="NULL">None</option>
                 {% for entry in menu %}
@@ -76,7 +78,7 @@
             </select>
         </label><br>
         <label>Item Name: <input type="text" name="item_name" required></label><br>
-        <label>Price: <input name= "price" type="number" step="0.01" required></label><br>
+        <label>Price: <input name="price" type="number" step="0.01" required></label><br>
         <label>Alcoholic:
             <select required name="is_alcoholic">
                 <option value="False">False</option>
@@ -86,70 +88,74 @@
         <button type="submit">Add Item</button><br>
     </form>
 
-     <h3>Edit Item</h3>
-    <form id="edit-item_form" action="/update_item" method="POST" style="border: 2px solid black; display: none;">
+    <h3>Edit Item</h3>
+    <form id="edit-item-form" action="/update_item" method="POST" style="border: 2px solid black; display: none;">
         <input type="hidden" id="edit-item-id" name="item_id">
-        <label>Menu: 
-            <select name="menu_id" id="edit-menu-id">
+
+        <label>Item Name:
+            <input type="text" id="edit-item-name" name="item_name" required>
+        </label><br>
+
+        <label>Menu:
+            <select id="edit-item-menu" name="menu_id">
                 <option value="NULL">None</option>
                 {% for entry in menu %}
                 <option value="{{ entry.menu_id }}">{{ entry.idname }}</option>
                 {% endfor %}
             </select>
         </label><br>
-        <label>Item Name: <input type="text" name="item_name" id='edit-item-name' required></label><br>
-        <label>Price: <input name= "price" type="number" step="0.01" id='edit-price' required></label><br>
+
+        <label>Price:
+            <input type="number" id="edit-item-price" name="price" step="0.01" required>
+        </label><br>
+
         <label>Alcoholic:
-            <select required name="is_alcoholic" id='edit-is-alcoholic'>
+            <select id="edit-item-alcoholic" name="is_alcoholic" required>
                 <option value="False">False</option>
                 <option value="True">True</option>
             </select>
         </label><br>
+
         <button type="submit">Save Changes</button>
         <button type="button" onclick="cancelEdit()">Cancel</button>
     </form>
 
     <script>
-        function editAssignment(button) {
-            // get the row of the clicked button
+        function editItem(button) {
             let row = button.parentNode.parentNode;
             let cells = row.getElementsByTagName("td");
 
-            // populate the edit form fields
-            document.getElementById("edit-assignment-id").value = cells[0].innerText;
-            
-            // Set the dropdown values
-            const employeeId = cells[1].innerText;
-            const employeeSelect = document.getElementById("edit-employee-id");
-            for (let i = 0; i < employeeSelect.options.length; i++) {
-                if (employeeSelect.options[i].value === employeeId) {
-                    employeeSelect.selectedIndex = i;
-                    break;
-                }
-            }
-            
-            const eventId = cells[3].innerText;
-            const eventSelect = document.getElementById("edit-event-id");
-            for (let i = 0; i < eventSelect.options.length; i++) {
-                if (eventSelect.options[i].value === eventId) {
-                    eventSelect.selectedIndex = i;
-                    break;
-                }
+            // Populate hidden input for Item ID
+            document.getElementById("edit-item-id").value = cells[0].innerText;
+
+            // Populate name and price
+            document.getElementById("edit-item-name").value = cells[1].innerText;
+            document.getElementById("edit-item-price").value = cells[4].innerText;
+
+            // Handle the Menu Dropdown Pre-Selection
+            let menuDropdown = document.getElementById("edit-item-menu");
+            let currentMenuId = cells[2].innerText;  // Menu ID in the row
+
+            // If the menu_id is empty, select "None"
+            if (currentMenuId === "") {
+                menuDropdown.value = "NULL";
+            } else {
+                menuDropdown.value = currentMenuId;
             }
 
-            // show the edit form
-            document.getElementById("edit-assignment-form").style.display = "block";
+            // Handle the is_alcoholic dropdown
+            let alcoholicDropdown = document.getElementById("edit-item-alcoholic");
+            alcoholicDropdown.value = cells[5].innerText;  // "True" or "False"
+
+            // Show the Edit Form
+            document.getElementById("edit-item-form").style.display = "block";
         }
 
         function cancelEdit() {
-            document.getElementById("edit-assignment-form").style.display = "none";
-        }
-
-        function deleteAssignment(id) {
-            if (confirm("Are you sure you want to delete this assignment?")) {
-                window.location.href = "/delete_assignment/" + id;
-            }
+            document.getElementById("edit-item-form").style.display = "none";
         }
     </script>
-  </body>
+
+</body>
+
 </html>
