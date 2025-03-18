@@ -110,6 +110,11 @@ UPDATE Events
         event_address = :address_in
     WHERE event_id = :selected_id;
 
+-- Update an Item
+UPDATE Items
+SET  menu_id = :menu_id_in, price = :price_in, is_alcoholic = :is_alcoholic_in, item_name = :item_name_in
+WHERE item_id = :selected_id;
+
 -- Reassign/update an employee assignment to an event
 UPDATE AssignedCaterers
     SET employee_id = :employee_in,

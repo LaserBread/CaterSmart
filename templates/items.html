@@ -42,6 +42,7 @@
                 <th>Menu Name</th>
                 <th>Price</th>
                 <th>Alcoholic</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -59,6 +60,7 @@
                 </td>
                 <td>{{ row.price }}</td>
                 <td>{{ row.is_alcoholic }}</td>
+                <td><button onclick="editItem(this)">Edit</button></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -66,7 +68,7 @@
 
     <h3>Add New Item</h3>
     <form id="item-form" style="border: 2px solid black;" method="POST">
-        <!-- <label>Menu ID: <input type="number" required></label><br> -->
+
         <label>Menu: 
             <select name="menu_id" id="menu_id">
                 <option value="NULL">None</option>
@@ -85,5 +87,73 @@
         </label><br>
         <button type="submit">Add Item</button><br>
     </form>
+
+    <h3>Edit Item</h3>
+    <form id="edit-item-form" action="/update_item" method="POST" style="border: 2px solid black; display: none;">
+        <input type="hidden" id="edit-item-id" name="item_id">
+        
+        <label>Item Name: 
+            <input type="text" id="edit-item-name" name="item_name" required>
+        </label><br>
+        
+        <label>Menu: 
+            <select id="edit-item-menu" name="menu_id">
+                <option value="NULL">None</option>
+                {% for entry in menu %}
+                <option value="{{ entry.menu_id }}">{{ entry.idname }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+        
+        <label>Price: 
+            <input type="number" id="edit-item-price" name="price" step="0.01" required>
+        </label><br>
+        
+        <label>Alcoholic:
+            <select id="edit-item-alcoholic" name="is_alcoholic" required>
+                <option value="False">False</option>
+                <option value="True">True</option>
+            </select>
+        </label><br>
+        
+        <button type="submit">Save Changes</button>
+        <button type="button" onclick="cancelEdit()">Cancel</button>
+    </form>
+
+    <script>
+        function editItem(button) {
+            let row = button.parentNode.parentNode;
+            let cells = row.getElementsByTagName("td");
+            
+            // populate hidden input for Item ID
+            document.getElementById("edit-item-id").value = cells[0].innerText;
+            
+            // populate name and price
+            document.getElementById("edit-item-name").value = cells[1].innerText;
+            document.getElementById("edit-item-price").value = cells[4].innerText;
+            
+
+            let menuDropdown = document.getElementById("edit-item-menu");
+            let currentMenuId = cells[2].innerText; 
+            
+            // if the menu_id is empty, select "None"
+            if (currentMenuId === "") {
+                menuDropdown.value = "NULL";
+            } else {
+                menuDropdown.value = currentMenuId;
+            }
+            
+            // handle the is_alcoholic dropdown
+            let alcoholicDropdown = document.getElementById("edit-item-alcoholic");
+            alcoholicDropdown.value = cells[5].innerText;  // "True" or "False"
+            
+            // show form
+            document.getElementById("edit-item-form").style.display = "block";
+        }
+        
+        function cancelEdit() {
+            document.getElementById("edit-item-form").style.display = "none";
+        }
+    </script>
   </body>
 </html>

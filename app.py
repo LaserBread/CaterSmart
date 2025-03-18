@@ -289,6 +289,40 @@ def items():
         row['is_alcoholic'] = 'True' if row['is_alcoholic'] else 'False'
     return render_template("items.html", data = data, menu=menu)
 
+"""UPDATE ITEM route"""
+@app.route('/update_item', methods=['POST'])
+def update_item():
+    item_id = request.form['item_id']
+    menu_id = request.form['menu_id']
+    item_name = request.form['item_name']
+    price = request.form['price']
+    is_alcoholic = request.form['is_alcoholic'] == 'True'
+
+    if menu_id == "NULL":  # Convert "NULL" string to Python None
+            menu_id = None
+    
+    # try/except block: handles when user attempts to update items
+    cur = mysql.connection.cursor()
+    try:
+        cur.execute("""
+            UPDATE Items
+            SET  menu_id = %s, price = %s, is_alcoholic = %s, item_name = %s
+            WHERE item_id = %s
+        """, (menu_id, price, is_alcoholic, item_name, item_id))
+        mysql.connection.commit()
+        flash('Item updated successfully!', 'success')
+
+    except MySQLdb.IntegrityError as e:
+        # this is the error raised when the UNIQUE constraint is violated
+        if e.args[0] == 1062:  # 1062 is MySQL's error code for duplicate entry
+            flash('This item name already exists.', 'danger')
+        else:
+            flash(f'An unexpected error occurred: {e.args[1]}', 'danger')
+
+    finally:
+        cur.close()
+    return redirect(url_for('items'))
+
 '''SELECT/INSERT ITEMINGREDIENTS route'''
 @app.route('/item_ingredients', methods=['GET', 'POST'])
 def item_ingredients():
