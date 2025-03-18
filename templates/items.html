@@ -85,5 +85,71 @@
         </label><br>
         <button type="submit">Add Item</button><br>
     </form>
+
+     <h3>Edit Item</h3>
+    <form id="edit-item_form" action="/update_item" method="POST" style="border: 2px solid black; display: none;">
+        <input type="hidden" id="edit-item-id" name="item_id">
+        <label>Menu: 
+            <select name="menu_id" id="edit-menu-id">
+                <option value="NULL">None</option>
+                {% for entry in menu %}
+                <option value="{{ entry.menu_id }}">{{ entry.idname }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+        <label>Item Name: <input type="text" name="item_name" id='edit-item-name' required></label><br>
+        <label>Price: <input name= "price" type="number" step="0.01" id='edit-price' required></label><br>
+        <label>Alcoholic:
+            <select required name="is_alcoholic" id='edit-is-alcoholic'>
+                <option value="False">False</option>
+                <option value="True">True</option>
+            </select>
+        </label><br>
+        <button type="submit">Save Changes</button>
+        <button type="button" onclick="cancelEdit()">Cancel</button>
+    </form>
+
+    <script>
+        function editAssignment(button) {
+            // get the row of the clicked button
+            let row = button.parentNode.parentNode;
+            let cells = row.getElementsByTagName("td");
+
+            // populate the edit form fields
+            document.getElementById("edit-assignment-id").value = cells[0].innerText;
+            
+            // Set the dropdown values
+            const employeeId = cells[1].innerText;
+            const employeeSelect = document.getElementById("edit-employee-id");
+            for (let i = 0; i < employeeSelect.options.length; i++) {
+                if (employeeSelect.options[i].value === employeeId) {
+                    employeeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            
+            const eventId = cells[3].innerText;
+            const eventSelect = document.getElementById("edit-event-id");
+            for (let i = 0; i < eventSelect.options.length; i++) {
+                if (eventSelect.options[i].value === eventId) {
+                    eventSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // show the edit form
+            document.getElementById("edit-assignment-form").style.display = "block";
+        }
+
+        function cancelEdit() {
+            document.getElementById("edit-assignment-form").style.display = "none";
+        }
+
+        function deleteAssignment(id) {
+            if (confirm("Are you sure you want to delete this assignment?")) {
+                window.location.href = "/delete_assignment/" + id;
+            }
+        }
+    </script>
   </body>
 </html>
